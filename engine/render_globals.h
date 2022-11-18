@@ -16,7 +16,7 @@ uint8_t shader_override = 0; // change to use debug shaders
 uint32_t rendered_triangles = 0;
 #endif
 
-#ifdef PERFORMANCE_COUNTER
+#ifdef FRAME_COUNTER
 uint32_t perf_25_below = 0;
 uint32_t perf_50_below = 0;
 uint32_t perf_75_below = 0;

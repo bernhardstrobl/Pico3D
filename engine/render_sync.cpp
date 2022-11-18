@@ -37,7 +37,7 @@ int32_t render_sync() {
 
 
         //performance counters
-        #ifdef PERFORMANCE_COUNTER
+        #ifdef FRAME_COUNTER
             if (core1_time < 25000) {
                 perf_25_below++;
             } else if (core1_time < 50000) {

@@ -1,7 +1,7 @@
 #include "picosystem.hpp"
 
 #include "pico/multicore.h"
-#include "hardware/structs/bus_ctrl.h" //so we can set high bus priority on Core1
+#include "hardware/structs/bus_ctrl.h" //so we can set high bus priority on Core1 & have contention counters
 #include <cstring> //memcpy etc.
 #include <math.h>
 
@@ -11,12 +11,15 @@ using namespace picosystem;
 //#define GAMESCOM //enables tweaks for a gamescom version with peace loving balloons instead of zombies
 //#define SKIP_START //skips the starting splash/menu and goes straight into normal gameplay (menu = 0)
 //#define FREE_ROAM //set to ignore chunk physics for player
-//#define DEBUG_INFO //adds information on core times and triangle counts in the main menu
 //#define DEBUG_SHADERS //debug shaders are those with shader_id >= 250
-//#define CPU_LED_LOAD //CPU load on LED (Core1: Green-40fps, Yellow-20fps, Red-10fps), blue if core 0 overloaded
-//#define PERFORMANCE_COUNTER //tallies frametimes for performance analysis
+
+//Defines for performance profiling
+//#define DEBUG_INFO //adds information on core times and triangle counts in the main menu
 //#define NO_NPCS //disable all npcs including Zombies
-//added blue if Core0 takes too long in the draw/update routine -> physics too slow
+//#define RASTERIZER_IN_FLASH //puts the render_rasterize function for core 1 into flash instead of scratch RAM
+//#define FRAME_COUNTER //tallies frametimes for performance analysis
+//#define CONTENTION_COUNTER //enables counters for RAM contention on the 4 main banks
+//#define CPU_LED_LOAD //CPU load on LED (Core1: Green-40fps, Yellow-20fps, Red-10fps), blue if core 0 overloaded (logic too slow)
 
 int32_t logic_time;
 
@@ -118,6 +121,15 @@ void init() {
     
     //set core1 to highest bus priority
     bus_ctrl_hw->priority = BUSCTRL_BUS_PRIORITY_PROC1_BITS;
+
+    #ifdef CONTENTION_COUNTER
+    //performance counters / contention for SRAM
+    bus_ctrl_hw->counter[0].sel = arbiter_sram0_perf_event_access_contested;
+    bus_ctrl_hw->counter[1].sel = arbiter_sram1_perf_event_access_contested;
+    bus_ctrl_hw->counter[2].sel = arbiter_sram2_perf_event_access_contested;
+    bus_ctrl_hw->counter[3].sel = arbiter_sram3_perf_event_access_contested;
+    #endif
+
 
     //We first need to tell core 1 to start rasterizing the first empty dummy frame
     multicore_fifo_push_blocking(0);
@@ -303,7 +315,19 @@ void draw(uint32_t tick) {
     }
     #endif
 
-    //if Core0 struggles with workload causing fps drop, add blue component to LED
+    #ifdef CONTENTION_COUNTER
+    uint32_t sram1_contested = bus_ctrl_hw->counter[0].value;
+    uint32_t sram2_contested = bus_ctrl_hw->counter[1].value;
+    uint32_t sram3_contested = bus_ctrl_hw->counter[2].value;
+    uint32_t sram4_contested = bus_ctrl_hw->counter[3].value;
+
+    text("R1:" + str(sram1_contested), 0, 0);
+    text("R2:" + str(sram2_contested), 0, 10);
+    text("R3:" + str(sram3_contested), 0, 20);
+    text("R4:" + str(sram4_contested), 0, 30);
+    #endif
+
+    //if Core0 struggles with workload causing logic and fps drop, show blue on the LED
     #ifdef CPU_LED_LOAD
     if (stats.fps < 40) {
         led(0, 0, 25);

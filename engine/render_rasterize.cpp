@@ -11,8 +11,15 @@ int zbuffer_scale = FIXED_POINT_FACTOR / 16;
 uint8_t animated_texture_offset = 0;
 uint8_t animated_texture_counter = 0;
 
-
+//The rasterizer along with shaders is relatively small, so it can run from scratch memory
+//Note that if the rasterizer is run from flash instead, the integer divide function should also be put into flash
+// --> Remove target_compile_definitions(pico3d PUBLIC PICO_DIVIDER_IN_RAM=1) in CMake file
+//Performance may otherwise be significantly hampered due to the veneers translating function calls between RAM/flash
+#ifdef RASTERIZER_IN_FLASH
 void render_rasterize() {
+#else
+void __scratch_x("render_rasterize") render_rasterize() {
+#endif
 
     uint32_t num_triangle; //number of triangles we are asked to render
 
@@ -296,7 +303,8 @@ void render_rasterize() {
 
                     fb[y * SCREEN_WIDTH + x] = texture[u * image_size + v];
 
-#ifdef DEBUG_SHADERS
+                
+                #ifdef DEBUG_SHADERS
 
                 //DEBUG SHADERS
                 //the following shaders are additional debug shaders, starting at ID 250
@@ -427,7 +435,8 @@ void render_rasterize() {
                 //if a known shader id is not specified, return red to alert dev
                 } else {
                     fb[y * SCREEN_WIDTH + x] = 0x000F;
-#endif
+                #endif
+
                 }
 
             }

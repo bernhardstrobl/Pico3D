@@ -18,7 +18,7 @@
 #define GRID_WIDTH ((LOD1_GRID_WIDTH * 2) + LOD0_GRID_WIDTH)//grid width of the whole chunk cache
 #define TOTAL_CHUNKS (GRID_WIDTH * GRID_WIDTH)
 
-#define MAX_CHUNK_CACHE_TRIANGLES 2000 //the amount of triangles the chunk cache can store
+#define MAX_CHUNK_CACHE_TRIANGLES 1800 //the amount of triangles the chunk cache can store
 
 int32_t cached_triangles = 0; //amount of triangles currently in the cache
 

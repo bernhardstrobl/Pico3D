@@ -14,11 +14,11 @@ void display_menu() {
         text("Battery:" + str(battery()), 0, 60);
 
         //additional debug info if needed
-        #ifdef PERFORMANCE_COUNTER
+        #ifdef FRAME_COUNTER
         text("40:" + str(perf_25_below), 60, 0);
         text("20:" + str(perf_50_below), 60, 10);
-        text("10:" + str(perf_75_below), 60, 20);
-        text("<10:" + str(perf_75_above), 60, 30);
+        text("13:" + str(perf_75_below), 60, 20);
+        text("<13:" + str(perf_75_above), 60, 30);
         #endif
 
         //additional debug info if needed

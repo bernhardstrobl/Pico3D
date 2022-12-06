@@ -27,10 +27,8 @@ int32_t current_chunk_y = -1;
 
 //a single chunk points to its own triangle lists with geometry
 struct chunk{
-    int8_t lod_level = -1;
-    uint8_t num_triangles;
-    uint8_t reserved1; //unused
-    uint8_t reserved2; //unused
+    uint16_t num_triangles;
+    uint16_t reserved; //unused
     const struct triangle_16 *triangles; //chunks in flash/storage need to have their pointer set to const
 };
 

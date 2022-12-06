@@ -137,6 +137,7 @@ void logic_shoot() {
                     zombie_list[i].status = 3;
                     zombie_list[i].progress = 0;
                     player_kills++;
+                    player_money += QUEST_KILL_REWARD;
                 
                 //otherwise play slouch animation
                 } else {

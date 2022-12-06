@@ -8,7 +8,7 @@ import bpy
 
 class Pico3dPanel(bpy.types.Panel):
     bl_idname = 'VIEW3D_PT_pico3d_panel'
-    bl_label = 'Pico 3D Export'
+    bl_label = 'Pico3D Export'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     
@@ -45,8 +45,8 @@ PROPS = [
 
 
 PROPS_ADVANCED = [
-    ('lod0_triangle_limit', bpy.props.IntProperty(name='LoD 0 Triangle Limit', default=128)),
-    ('lod1_triangle_limit', bpy.props.IntProperty(name='LoD 1 Triangle Limit', default=32)),
+    ('lod0_triangle_limit', bpy.props.IntProperty(name='LoD 0 Triangle Limit', default=255)),
+    ('lod1_triangle_limit', bpy.props.IntProperty(name='LoD 1 Triangle Limit', default=128)),
     ('scaling_factor', bpy.props.IntProperty(name='Scaling Factor', default=1)),
     #('fixed_point', bpy.props.BoolProperty(name='Fixed Point Math', default=True)),
     ('fixed_point_factor', bpy.props.IntProperty(name='Fixed Point Factor', default=1024)),
@@ -496,9 +496,9 @@ class Pico3dExport(bpy.types.Operator):
                     
                     
                     if y == world_size_y - 1:
-                        chunk_output += '{' + str(lod) + ', ' + modelname.upper() + ', 0, 0, ' + modelname + '}\n'
+                        chunk_output += '{' + modelname.upper() + ', 0, ' + modelname + '}\n'
                     else:
-                        chunk_output += '{' + str(lod) + ', ' + modelname.upper() + ', 0, 0, ' + modelname + '}, \n'
+                        chunk_output += '{' + modelname.upper() + ', 0, ' + modelname + '}, \n'
                         
                 else:
                     #try to find a repeat chunk which can be used
@@ -508,9 +508,9 @@ class Pico3dExport(bpy.types.Operator):
                     if (repeat_chunk == False):
                         #print('Chunk not found:' + meshname)
                         if y == world_size_y - 1:
-                            chunk_output += '{' + str(lod) + ', 0, 0, 0, NULL}\n'
+                            chunk_output += '{0, 0, NULL}\n'
                         else:
-                            chunk_output += '{' + str(lod) + ', 0, 0, 0, NULL}, \n'
+                            chunk_output += '{0, 0, NULL}, \n'
                     else:
                         #print('Using repeat chunk: ' + repeat_chunk + ' for chunk: lod' + str(lod) + '_' + str(x) + '_' + str(y))
                         
@@ -524,9 +524,9 @@ class Pico3dExport(bpy.types.Operator):
                         
                         
                         if y == world_size_y - 1:
-                            chunk_output += '{' + str(lod) + ', ' + repeat_chunk.upper() + ', 0, 0, ' + repeat_chunk + '}\n'
+                            chunk_output += '{' + repeat_chunk.upper() + ', 0, ' + repeat_chunk + '}\n'
                         else:
-                            chunk_output += '{' + str(lod) + ', ' + repeat_chunk.upper() + ', 0, 0, ' + repeat_chunk + '}, \n'
+                            chunk_output += '{' + repeat_chunk.upper() + ', 0, ' + repeat_chunk + '}, \n'
                             
                         
             if x == world_size_x - 1:

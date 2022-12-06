@@ -16,9 +16,9 @@ void logic_new_game() {
     //camera_position[0] = -8;
     //camera_position[2] = 8;
 
-    //in the field
-    //camera_position[0] = 35;
-    //camera_position[2] = -20;
+    //in the outskirts
+    camera_position[0] = 35;
+    camera_position[2] = -20;
 
     pitch = 0;
     yaw = 0;
@@ -41,28 +41,6 @@ void logic_new_game() {
 
 }
 
-//this code handles talking to nearby npcs
-void talk_quest_npc() {
-    if (close_npc != -1) {
-        //npcs with negative 1 open menus
-        if (npc_quest_list[close_npc].dialogue == -1) {
-
-        } else {
-            if (close_npc == 0) {
-                dialogue_display = npc_quest_list[0].dialogue;
-                npc_quest_list[0].dialogue++;
-                if (npc_quest_list[0].dialogue == 7) {
-                    npc_quest_list[0].dialogue = 6;
-                }
-            }
-
-            dialogue_time_remain = DIALOGUE_TIMER;
-        }
-
-
-    }
-
-}
 
 
 void logic_events() {

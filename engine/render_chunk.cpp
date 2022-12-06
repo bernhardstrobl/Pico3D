@@ -31,8 +31,8 @@ void chunk_locate(int32_t x, int32_t y, int32_t &chunk_x, int32_t &chunk_y) {
 //calling this "physics" is very much a stretch but it will do for the time being
 //chunks 1 are for city npcs, 2 for zombies. Anything above 0 can be entered by the player (except when gate is closed)
 uint8_t chunk_physics[12][12] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                                 {0, 1, 1, 1, 0, 0, 2, 2, 2, 2, 2, 0},
-                                 {0, 1, 0, 1, 0, 0, 2, 2, 2, 2, 2, 0},
+                                 {0, 1, 1, 1, 0, 0, 2, 2, 2, 2, 0, 0},
+                                 {0, 1, 0, 1, 0, 0, 2, 2, 2, 2, 5, 0},
                                  {0, 1, 0, 1, 0, 0, 2, 2, 2, 2, 2, 0},
                                  {0, 1, 0, 1, 0, 0, 2, 2, 2, 2, 2, 0},
                                  {0, 1, 1, 1, 0, 0, 2, 2, 2, 2, 2, 0},
@@ -75,11 +75,11 @@ uint8_t chunk_traversable(int32_t x, int32_t y, uint8_t character_type) {
         int32_t daylight = (global_time % (QUARTER_DAY * 4)) / QUARTER_DAY;
 
         if (daylight == 2) {
-            if (player_area == AREA_OUTSKIRTS) {
-                if (c1 != 2 || c2 != 2 || c3 != 2 || c4 != 2) {
-                    return 0;
-                } else {
+            if (player_area == AREA_OUTSKIRTS || player_area == AREA_OUTSKIRT_STABLES) {
+                if ((c1 == 2 || c1 == 5) && (c2 == 2 || c2 == 5) && (c3 == 2 || c3 == 5) && (c4 == 2 || c4 == 5)) {
                     return 1;
+                } else {
+                    return 0;
                 }
             } else {
                 if (c1 == 2 || c2 == 2 || c3 == 2 || c4 == 2) {

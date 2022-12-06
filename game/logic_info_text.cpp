@@ -1,5 +1,5 @@
 //displays text when a player changes areas, npcs leave comments and shows things like health/ammo in the outskirts etc.
-
+//this differs from menus in that information is only overlaid and movement is never compromised
 
 #define INFO_TIMER 120 //display any info for around 3 seconds
 #define DIALOGUE_TIMER 200 //display spoken stuff by quest npcs for 5
@@ -11,7 +11,7 @@ int32_t info_display = 0;
 int32_t dialogue_time_remain = 0;
 int32_t dialogue_display = 0;
 
-//check if the area where the player is has changed from the previous frame
+//check if the area where the player has changed from the previous frame
 void logic_player_area() {
 
     //we get the array position of the center chunk where the player is
@@ -24,6 +24,9 @@ void logic_player_area() {
 
     if (chunk_y >= 6) {
         new_area = AREA_OUTSKIRTS;
+        if (chunk_y >= 10 && chunk_x < 3) {
+            new_area = AREA_OUTSKIRT_STABLES;
+        }
     } else if (chunk_x > 7) {
         new_area = AREA_YAKUZA_ALLEY;
     } else if (chunk_x < 5) {
@@ -99,25 +102,27 @@ void display_info() {
         if (player_area == AREA_OUTSKIRTS) {
             text("Outskirts", 38, 20);
         } else if (player_area == AREA_YAKUZA_ALLEY) {
-            #ifdef GAMESCOM //remove Yakuza reference for GC
             text("Back Alley", 35, 20);
-            #else
-            text("Yakuza Alley", 30, 20);
-            #endif
         } else if (player_area == AREA_DOWNTOWN) {
             text("Downtown", 38, 20);
         } else if (player_area == AREA_CITY_CENTER) {
             text("City Center", 35, 20);
+        } else if (player_area == AREA_OUTSKIRT_STABLES) {
+            text("Outskirt", 37, 20);
+            text("Stable", 40, 30);
         }
         info_time_remain--;
     }
 
     //show talk button if quest/shop npc is close
     if (close_npc != -1) {
-        text("A: Talk", 0, 110);
+        if (close_npc == 1 && npc_quest_list[close_npc].dialogue == 11) {
+            text("A: Buy Ammo", 0, 110);
+        }else {
+            text("A: Talk", 0, 110);
+        }
     }
 
-    //show talk button if quest/shop npc is close
     if (show_battery == 1) {
         text("Battery:" + str(battery()), 60, 110);
     }
@@ -156,6 +161,20 @@ void display_info() {
                         text("Wow you got over a 100!", 0, 90); 
                         text("You're a zombie killer!", 0, 100); break;
                     }
+
+            
+            case 10:text("Need Bullets?", 0, 90); text("10$ for 5.", 0, 100);break;
+            case 11:text("Good hunting.", 0, 90); break;
+            case 12:text("You don't have", 0, 90); text("enough money.", 0, 100); break;
+
+
+            case 20: text("Oh, well done for", 0, 90); text("making it here.", 0, 100);break;
+            case 21: text("The fire keeps the", 0, 90); text("zombies away.", 0, 100);break;
+            case 22: text("This place used to", 0, 90); text("have horses but...", 0, 100); break;
+            case 23: text("I mean look at the", 0, 90); text("surroundings...", 0, 100); break;
+            case 24: text("The owner is very", 0, 90); text("unhappy due to this.", 0, 100); break;
+            case 25: text("Sells ammo to anyone,", 0, 90); text("hoping it will help.", 0, 100); break;
+            case 26: text("Don't get killed", 0, 90); text("and stock up.", 0, 100); break;
         }
         #endif
 

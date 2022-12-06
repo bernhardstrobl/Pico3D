@@ -1,4 +1,5 @@
 //display and handle different menus (main, shop and death etc.)
+//menus usually remove control in some way from the player by deactivating normal movement
 
 void display_menu() {
 

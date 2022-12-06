@@ -1,8 +1,6 @@
-# Pico3D Engine for the PicoSystem
+# Pico3D Engine for the Pimoroni PicoSystem
 
-![alt text](pico3d.jpeg)
-
-⚠️ Documentation on how to modify and use the engine is still being worked on, please be patient.
+![Pico3D preview](docs/pico3d.jpeg)
 
 ## Getting Started
 
@@ -14,12 +12,18 @@ Add pico_multicore to the target_link_libraries in picosystem.cmake found in pic
 
 You should now be able to compile all the examples including pico3d.
 
+
+## Tutorials
+- [Creating and exporting a game world in Blender](docs/tutorial_blender_export.md)
+- [Material, Lights and Textures in Blender](docs/tutorial_blender_materials.md) 
+
+
 ## F.A.Q.
 
 ### How big can the world be?
 The included game has a grid size of 12x12 chunks (each chunk is 10x10m in size -> world size of 120x120m).  
 Right now the chunk cache uses an 8 bit int for each direction limiting the world size to 256x256 chunks (2.56x2.56km) but that can be easily extended.  
-A bigger issue is likely to be storage space since unless heavy use of repeat/procedurally chunks is made use of the binary is likely to exceed 16MB.   
+A bigger issue is likely to be storage space since unless heavy use of repeat/procedurally chunks is made use of the binary is likely to exceed 16MB.  
 Also, integer overflows are likely to occur earlier, although again easy enough to fix with an additional offset.  
 
 ### How are the NPCs loaded in/out?

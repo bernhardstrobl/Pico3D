@@ -23,6 +23,7 @@ int32_t input_idle_timer = 0;
 #define AREA_CITY_CENTER 2
 #define AREA_YAKUZA_ALLEY 3
 #define AREA_DOWNTOWN 4
+#define AREA_OUTSKIRT_STABLES 5
 #define SHOTGUN_DAMAGE 20
 int32_t player_area = 0;
 
@@ -59,10 +60,13 @@ int32_t demo_progress = 0;
 #define NPC_WALK_TIME 128 //How long an animated walk cycle is
 
 //quest npcs
-#define MAX_QUEST_NPCS 1
-#define QUEST_NPC_TALK_DISTANCE (FIXED_POINT_FACTOR * 5)
+#define MAX_QUEST_NPCS 3
+#define QUEST_NPC_TALK_DISTANCE (FIXED_POINT_FACTOR * 3)
 int32_t close_npc; //if a player is close to a quest/shop npc, allow the use of the A button to talk
 
+#define QUEST_AMMO_COST 10
+#define QUEST_AMMO_PURCHASE 5
+#define QUEST_KILL_REWARD 3
 
 //zombie logic
 #ifdef NO_NPCS
@@ -87,6 +91,7 @@ int32_t close_npc; //if a player is close to a quest/shop npc, allow the use of 
 #define ZOMBIE_DEATH_DURATION 32 //animation time for zombie to die
 #define ZOMBIE_DESPAWN_DURATION 1024 //time taken for the zombie to disappear (decompose i guess)
 #define ZOMBIE_ATTACK_DAMAGE 1
+
 
 
 //input

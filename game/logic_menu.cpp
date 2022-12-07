@@ -44,6 +44,11 @@ void display_menu() {
     } else if (menu == MENU_START) {
         pen(15, 15, 15);
 
+        #ifdef BENCHMARK
+        if (benchmark_complete == 0) {
+            text("BENCHMARKING", 0, 0);
+        }
+        #else
         if (demo_progress < 2500) {
             text("Pico3D Engine", 28, 20);
             text("by: Bernhard Strobl", 10, 30);
@@ -52,6 +57,7 @@ void display_menu() {
         if ((demo_progress / 32) % 2 == 0) {
             text("Press any button", 20, 90);
         }
+        #endif
 
     } else if (menu == MENU_DEATH) {
         pen(15, 0, 0);

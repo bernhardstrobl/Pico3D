@@ -20,12 +20,11 @@ void init_quest_npcs() {
     npc_quest_list[1].y = -41 * FIXED_POINT_FACTOR;
 
 
-
     //Fireplace guy
     npc_quest_list[2].status = 1;
     npc_quest_list[2].direction = 1;
-    npc_quest_list[2].shirt_color = 0xA00A; 
-    npc_quest_list[2].dialogue = 20; 
+    npc_quest_list[2].shirt_color = 0xAF0A;
+    npc_quest_list[2].dialogue = 20;
     npc_quest_list[2].x = 48 * FIXED_POINT_FACTOR;
     npc_quest_list[2].y = -35 * FIXED_POINT_FACTOR;
 }
@@ -39,7 +38,7 @@ void talk_quest_npc() {
 
         } else {
             dialogue_display = npc_quest_list[close_npc].dialogue;
-            npc_quest_list[close_npc].dialogue++;
+            npc_quest_list[close_npc].dialogue++; //increase dialogue counter
 
             //give out same text for guard once conversation limit is reached
             if (npc_quest_list[close_npc].dialogue == 7) {
@@ -47,14 +46,16 @@ void talk_quest_npc() {
             }
 
             //Stable owner
-            if (npc_quest_list[close_npc].dialogue == 11 || npc_quest_list[close_npc].dialogue == 12 || npc_quest_list[close_npc].dialogue == 13) {
+            if (npc_quest_list[close_npc].dialogue == 12 || npc_quest_list[close_npc].dialogue == 13) {
 
                 if (player_money >= QUEST_AMMO_COST) {
                     player_money -= QUEST_AMMO_COST;
                     player_ammo += QUEST_AMMO_PURCHASE;
                     npc_quest_list[close_npc].dialogue = 11;
+                    dialogue_display = 11;
                 } else {
                     npc_quest_list[close_npc].dialogue = 12;
+                    dialogue_display = 12;
                 }
             }
 

@@ -54,5 +54,11 @@ void logic_demo() {
     demo_progress++;
     if (demo_progress >= 7000) {
         demo_progress = 0;
+        #ifdef BENCHMARK
+            if(benchmark_complete == 0) {
+                benchmark_complete = 1;
+                avg_frametime = avg_frametime / benchmark_frames;
+            }
+        #endif
     }
 }

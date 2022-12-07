@@ -20,10 +20,18 @@ using namespace picosystem;
 //#define FRAME_COUNTER //tallies frametimes for performance analysis
 //#define CONTENTION_COUNTER //enables counters for RAM contention on the 4 main banks
 //#define CPU_LED_LOAD //CPU load on LED (Core1: Green-40fps, Yellow-20fps, Red-10fps), blue if core 0 overloaded (logic too slow)
+//#define BENCHMARK //starts a benchmark recording average frametime and rough fps counter (takes 3 minutes!)
 
 int32_t logic_time;
-
 int32_t show_battery = 0;
+
+#ifdef BENCHMARK
+#define NO_NPCS //disable npcs for predictable performance
+uint32_t avg_frametime = 0;
+uint32_t benchmark_frames = 0;
+int32_t benchmark_complete = 0;
+#endif
+
 
 #include "engine/render_globals.h"
 #include "engine/chunk_globals.h" //chunk settings
@@ -290,7 +298,7 @@ void draw(uint32_t tick) {
 
 
 
-    //DEBUG
+    //DEBUG INFORMATION BELOW
     //clear the screen when all else fails to get at least debug output
     /*
     pen(0, 0, 0);
@@ -339,6 +347,20 @@ void draw(uint32_t tick) {
         if (battery() < 30) {
             led(25, 0, 0);
         }
+    #endif
+
+    #ifdef BENCHMARK
+    if (benchmark_complete == 1) {
+        text("Benchmark results:", 0, 0);
+        text("40 FPS:" + str(perf_25_below), 0, 10);
+        text("20 FPS:" + str(perf_50_below), 0, 20);
+        text("13 FPS:" + str(perf_75_below), 0, 30);
+        text("<13 FPS:" + str(perf_75_above), 0, 40);
+        text("Average frame time:", 0, 50);
+        text(str(avg_frametime), 0, 60);
+        text("Frames rendered:", 0, 70);
+        text(str(benchmark_frames), 0, 80);
+    }
     #endif
 
 }

@@ -17,8 +17,8 @@ void logic_new_game() {
     //camera_position[2] = 8;
 
     //in the outskirts
-    camera_position[0] = 35;
-    camera_position[2] = -20;
+    //camera_position[0] = 35;
+    //camera_position[2] = -20;
 
     pitch = 0;
     yaw = 0;

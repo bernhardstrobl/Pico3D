@@ -145,10 +145,12 @@ void logic_input() {
 
     } else if (menu == MENU_START) {
 
+        #ifndef BENCHMARK //Benchmark disables inputs
         if (pressed(A) || pressed(B) || pressed(X) || pressed(Y) || pressed(UP) || pressed(DOWN) || pressed(LEFT) || pressed(RIGHT)) {
             logic_new_game();
             menu = 0;
         }
+        #endif
 
     } else if (menu == MENU_DEATH) {
         

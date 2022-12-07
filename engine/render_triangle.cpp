@@ -196,10 +196,10 @@ void render_triangle(struct triangle_32 &in) {
         render_lighting(in);
     }
 
-    //if the shaders are meant to glow at night, reduce them to the correct one and return
+    //if the shaders are meant to glow at night, reduce them to the correct shader_id and return
     if (in.shader_id > 10 && in.shader_id < 20) {
         in.shader_id -= 10;
-    }
+    } 
 
     //if the triangle still exists at this point, we can add it to the triangle list
     triangle_list_next[number_triangles].vertex1.x = x1;

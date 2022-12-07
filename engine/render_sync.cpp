@@ -37,7 +37,21 @@ int32_t render_sync() {
 
 
         //performance counters
-        #ifdef FRAME_COUNTER
+        #ifdef BENCHMARK
+            if (benchmark_complete == 0) {
+                if (core1_time < 25000) {
+                    perf_25_below++;
+                } else if (core1_time < 50000) {
+                    perf_50_below++;
+                } else if (core1_time < 75000) {
+                    perf_75_below++;
+                } else if (core1_time >= 75000) {
+                    perf_75_above++;
+                }
+                benchmark_frames++;
+                avg_frametime += core1_time;
+            }
+        #elif FRAME_COUNTER
             if (core1_time < 25000) {
                 perf_25_below++;
             } else if (core1_time < 50000) {
@@ -48,6 +62,7 @@ int32_t render_sync() {
                 perf_75_above++;
             }
         #endif
+
 
     //if core 1 is still rendering, we have to keep the old frame and old triangle lists
     } else {

@@ -23,6 +23,13 @@ uint32_t perf_75_below = 0;
 uint32_t perf_75_above = 0;
 #endif
 
+#ifdef BENCHMARK
+uint32_t perf_25_below = 0;
+uint32_t perf_50_below = 0;
+uint32_t perf_75_below = 0;
+uint32_t perf_75_above = 0;
+#endif
+
 //Framebuffer for second core to render into
 color_t framebuffer[SCREEN_WIDTH * SCREEN_HEIGHT] __attribute__ ((aligned (4))) = { };
 buffer_t *FRAMEBUFFER = buffer(SCREEN_WIDTH, SCREEN_HEIGHT, framebuffer);

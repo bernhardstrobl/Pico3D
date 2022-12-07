@@ -10,7 +10,6 @@ These are split between flat and gouraud shaded triangles (i.e. those which have
 
 Gouraud:
 - glow: This ignores any lighting calculation onto the material. Useful for example to depict light sources which do not dim at night.
-- nolight: Always darkens triangles regardless of nearby light sources.
 
 Textures:
 - scroll: Applies a scrolling effect like those used in the city billboards.

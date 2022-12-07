@@ -116,7 +116,7 @@ void display_info() {
 
     //show talk button if quest/shop npc is close
     if (close_npc != -1) {
-        if (close_npc == 1 && npc_quest_list[close_npc].dialogue == 11) {
+        if (close_npc == 1 && (npc_quest_list[close_npc].dialogue == 11 || npc_quest_list[close_npc].dialogue == 12)) {
             text("A: Buy Ammo", 0, 110);
         }else {
             text("A: Talk", 0, 110);
@@ -164,7 +164,7 @@ void display_info() {
 
             
             case 10:text("Need Bullets?", 0, 90); text("10$ for 5.", 0, 100);break;
-            case 11:text("Good hunting.", 0, 90); break;
+            case 11:text("Good hunting.", 0, 90); text(str(player_money + QUEST_AMMO_COST) + "$ -> " + str(player_money) + "$", 0, 100); break;
             case 12:text("You don't have", 0, 90); text("enough money.", 0, 100); break;
 
 
@@ -172,9 +172,9 @@ void display_info() {
             case 21: text("The fire keeps the", 0, 90); text("zombies away.", 0, 100);break;
             case 22: text("This place used to", 0, 90); text("have horses but...", 0, 100); break;
             case 23: text("I mean look at the", 0, 90); text("surroundings...", 0, 100); break;
-            case 24: text("The owner is very", 0, 90); text("unhappy due to this.", 0, 100); break;
-            case 25: text("Sells ammo to anyone,", 0, 90); text("hoping it will help.", 0, 100); break;
-            case 26: text("Don't get killed", 0, 90); text("and stock up.", 0, 100); break;
+            case 24: text("The stable owner is", 0, 90); text("pretty unhappy.", 0, 100); break;
+            case 25: text("Sells ammo to anyone", 0, 90); text("hoping it will help.", 0, 100); break;
+            case 26: text("Don't get killed and", 0, 90); text("get some rest here.", 0, 100); break;
         }
         #endif
 

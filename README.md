@@ -1,6 +1,8 @@
 # Pico3D Engine for the Pimoroni PicoSystem
 
-![Pico3D preview](docs/pico3d.jpeg)
+![Pico3D preview](docs/pico3d.jpg)
+
+Created as part of a master's thesis at the Kempten University of Applied Sciences.
 
 ## Getting Started
 
@@ -13,9 +15,10 @@ Add pico_multicore to the target_link_libraries in picosystem.cmake found in pic
 You should now be able to compile all the examples including pico3d.
 
 
-## Tutorials
+## Blender Tutorials
 - [Creating and exporting a game world in Blender](docs/tutorial_blender_export.md)
-- [Material, Lights and Textures in Blender](docs/tutorial_blender_materials.md) 
+- [Material, lights and textures in Blender](docs/tutorial_blender_materials.md) 
+- [Exporting individual meshes](docs/tutorial_blender_mesh.md) 
 
 
 ## F.A.Q.

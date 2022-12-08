@@ -546,7 +546,7 @@ class Pico3dExport(bpy.types.Operator):
         #if there are no textures to be added, exit
         if (len(self.texture_list) == 0):
             #print('no textures to be added')
-            return ''
+            return 'struct texture chunk_texture_list[0] = {};'
         
             
         texture_count = len(self.textures)

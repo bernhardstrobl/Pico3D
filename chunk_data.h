@@ -6182,29 +6182,29 @@ struct texture chunk_texture_list[11] = {{32, 0, 0, texture0},
 {32, 0, 0, texture8},
 {32, 0, 0, texture9},
 {32, 0, 0, texture10}};
-struct light lights_0_4[1] = {{-52610,3487,-16584}};
-struct light lights_1_1[1] = {{-46605,8919,-43803}};
-struct light lights_1_2[1] = {{-49841,6168,-30955}};
-struct light lights_1_3[1] = {{-44624,12437,-23313}};
-struct light lights_1_5[1] = {{-42158,4804,-1527}};
-struct light lights_1_6[1] = {{-49209,4804,5727}};
-struct light lights_1_7[1] = {{-41948,4804,11493}};
-struct light lights_2_1[1] = {{-36197,3567,-50205}};
-struct light lights_2_6[1] = {{-35515,6256,4518}};
-struct light lights_2_7[1] = {{-32061,4838,18537}};
-struct light lights_2_8[1] = {{-38616,4838,28471}};
-struct light lights_2_9[1] = {{-33019,4838,38831}};
-struct light lights_2_10[1] = {{-38953,4838,50340}};
-struct light lights_3_1[1] = {{-25117,8328,-43793}};
-struct light lights_3_2[1] = {{-26009,15195,-38549}};
-struct light lights_3_3[1] = {{-22167,8031,-21032}};
-struct light lights_3_4[2] = {{-28239,16250,-16556},
+const struct light lights_0_4[1] = {{-52610,3487,-16584}};
+const struct light lights_1_1[1] = {{-46605,8919,-43803}};
+const struct light lights_1_2[1] = {{-49841,6168,-30955}};
+const struct light lights_1_3[1] = {{-44624,12437,-23313}};
+const struct light lights_1_5[1] = {{-42158,4804,-1527}};
+const struct light lights_1_6[1] = {{-49209,4804,5727}};
+const struct light lights_1_7[1] = {{-41948,4804,11493}};
+const struct light lights_2_1[1] = {{-36197,3567,-50205}};
+const struct light lights_2_6[1] = {{-35515,6256,4518}};
+const struct light lights_2_7[1] = {{-32061,4838,18537}};
+const struct light lights_2_8[1] = {{-38616,4838,28471}};
+const struct light lights_2_9[1] = {{-33019,4838,38831}};
+const struct light lights_2_10[1] = {{-38953,4838,50340}};
+const struct light lights_3_1[1] = {{-25117,8328,-43793}};
+const struct light lights_3_2[1] = {{-26009,15195,-38549}};
+const struct light lights_3_3[1] = {{-22167,8031,-21032}};
+const struct light lights_3_4[2] = {{-28239,16250,-16556},
 {-29301,4952,-10770}};
-struct light lights_3_5[1] = {{-29301,4952,-941}};
-struct light lights_3_7[1] = {{-29721,4838,11386}};
-struct light lights_4_6[1] = {{-11391,4952,1068}};
-struct light lights_10_2[1] = {{46080,5785,-35840}};
-struct chunk_lighting chunk_lights[12][12] = {{{0, NULL},{0, NULL},{0, NULL},{0, NULL},{1, lights_0_4},{0, NULL},{0, NULL},{0, NULL},{0, NULL},{0, NULL},{0, NULL},{0, NULL}},
+const struct light lights_3_5[1] = {{-29301,4952,-941}};
+const struct light lights_3_7[1] = {{-29721,4838,11386}};
+const struct light lights_4_6[1] = {{-11391,4952,1068}};
+const struct light lights_10_2[1] = {{46080,5785,-35840}};
+const struct chunk_lighting chunk_lights[12][12] = {{{0, NULL},{0, NULL},{0, NULL},{0, NULL},{1, lights_0_4},{0, NULL},{0, NULL},{0, NULL},{0, NULL},{0, NULL},{0, NULL},{0, NULL}},
 {{0, NULL},{1, lights_1_1},{1, lights_1_2},{1, lights_1_3},{0, NULL},{1, lights_1_5},{1, lights_1_6},{1, lights_1_7},{0, NULL},{0, NULL},{0, NULL},{0, NULL}},
 {{0, NULL},{1, lights_2_1},{0, NULL},{0, NULL},{0, NULL},{0, NULL},{1, lights_2_6},{1, lights_2_7},{1, lights_2_8},{1, lights_2_9},{1, lights_2_10},{0, NULL}},
 {{0, NULL},{1, lights_3_1},{1, lights_3_2},{1, lights_3_3},{2, lights_3_4},{1, lights_3_5},{0, NULL},{1, lights_3_7},{0, NULL},{0, NULL},{0, NULL},{0, NULL}},

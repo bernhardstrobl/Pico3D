@@ -2,7 +2,7 @@
 //every vertex is compared to the chunk it is in and the neighbouring chunks in a 3x3 fashion
 
 
-int32_t process_lighting(struct light &light, vertex_32 &vertex, color_t &color) {
+int32_t process_lighting(const struct light &light, vertex_32 &vertex, color_t &color) {
     
     if (((light.position.x - vertex.x) * (light.position.x - vertex.x)) + 
         ((light.position.y - vertex.y) * (light.position.y - vertex.y)) + 

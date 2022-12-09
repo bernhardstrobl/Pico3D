@@ -569,7 +569,7 @@ class Pico3dExport(bpy.types.Operator):
         fixed_point_factor = context.scene.fixed_point_factor
         
         lights = ''
-        chunk_lights = 'struct chunk_lighting chunk_lights[' + str(world_size_x) + '][' + str(world_size_y) + '] = {'
+        chunk_lights = 'const struct chunk_lighting chunk_lights[' + str(world_size_x) + '][' + str(world_size_y) + '] = {'
         
         chunk_light_data = ''
         
@@ -608,7 +608,7 @@ class Pico3dExport(bpy.types.Operator):
                         
                 #write out light information for that chunk
                 if (light_count > 0):
-                    chunk_light_data += 'struct light lights_' + str(x) + '_' + str(y) + '[' + str(light_count) + '] = {' + light_data + '};\n'
+                    chunk_light_data += 'const struct light lights_' + str(x) + '_' + str(y) + '[' + str(light_count) + '] = {' + light_data + '};\n'
                     chunk_lights += '{' + str(light_count) + ', ' + 'lights_' + str(x) + '_' + str(y) + '}'
                 else:
                     chunk_lights += '{0, NULL}'

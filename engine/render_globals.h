@@ -129,7 +129,7 @@ struct light {
 //lights in a chunk
 struct chunk_lighting {
     int32_t number;
-    struct light *lights;
+    const struct light *lights;
 };
 
 

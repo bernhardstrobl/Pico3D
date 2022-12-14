@@ -2,7 +2,12 @@
 
 ![Pico3D preview](docs/pico3d.jpg)
 
-Created as part of a master's thesis at the Kempten University of Applied Sciences.
+
+
+## Overview
+This engine basically utilizes the second core of the RP2040 as a dedicated rasterizer/GPU.  
+It contains a small city inspired by Cyberpunk 2077 and the Yakuza series of games as well as a city outskirts featuring shootable zombies.
+
 
 ## Getting Started
 
@@ -23,11 +28,19 @@ You should now be able to compile all the examples including pico3d.
 
 ## F.A.Q.
 
+### I don't have a PicoSystem?!
+Check out [Daft's Emulator for RP2040](https://github.com/Daft-Freak/DERP).
+
+### How did this project come about?
+Pico3D was created as part of a master's thesis at the Kempten University of Applied Sciences.  
+It was designed to answer the question of whether a modern $1 microcontroller could run a complete open world 3D game.
+
 ### How big can the world be?
 The included game has a grid size of 12x12 chunks (each chunk is 10x10m in size -> world size of 120x120m).  
 Right now the chunk cache uses an 8 bit int for each direction limiting the world size to 256x256 chunks (2.56x2.56km) but that can be easily extended.  
 A bigger issue is likely to be storage space since unless heavy use of repeat/procedurally chunks is made use of the binary is likely to exceed 16MB.  
-Also, integer overflows are likely to occur earlier, although again easy enough to fix with an additional offset.  
+Plenty of creative procedural tricks are possible to get around this issue as well however if you want the next Daggerfall.
+Also, integer overflows are likely to occur earlier, although again easy enough to fix with an additional offset (future update).  
 
 ### How are the NPCs loaded in/out?
 Right now the game simply simulates all 50 NPCs and 50 zombies at the same time since that is pretty cheap compared to the actual rendering.  

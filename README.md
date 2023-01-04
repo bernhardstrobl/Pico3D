@@ -6,10 +6,14 @@
 
 ## Overview
 This engine basically utilizes the second core of the RP2040 as a dedicated rasterizer/GPU.  
-It contains a small city inspired by Cyberpunk 2077 and the Yakuza series of games as well as a city outskirts featuring shootable zombies.
+It contains a small city as well as an outskirts featuring shootable zombies.
 
+[Gameplay video](https://www.youtube.com/watch?v=n6bECGQyNuk)  
+[Demo video](https://www.youtube.com/watch?v=6WkltAOFDYs)
 
 ## Getting Started
+
+If all you want are .uf2 binaries, check the releases for the newest version.
 
 You will need the [PicoSystem SDK](https://github.com/pimoroni/picosystem) (and the required Pico SDK).  
 Copy the whole Pico3D folder as an example project into picosystem/examples and add "add_subdirectory(pico3d)" entry into the CMakeLists.txt.
@@ -46,6 +50,10 @@ Also, integer overflows are likely to occur earlier, although again easy enough 
 Right now the game simply simulates all 50 NPCs and 50 zombies at the same time since that is pretty cheap compared to the actual rendering.  
 It's also more realistic that way and uncovers any big issues in the self-made RNG ;).  
 Rendering is optimized with distance and view frustum culling.
+
+
+### What were the inspirations for the game world
+The city itself was inspired heavily by Cyberpunk 2077 and the Yakuza series of games. The outskirts have a Legend of Zelda: Breath of the Wild influence.
 
 ### Why are there so many redundant functions in certain code areas like the zombie logic?  
 Divisions are relatively expensive on the RP2040 if performed in quick succession such as when interpolating vertices for mesh blending.  

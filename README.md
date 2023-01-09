@@ -35,9 +35,11 @@ You should now be able to compile all the examples including pico3d.
 ### I don't have a PicoSystem?!
 Check out [Daft's Emulator for RP2040](https://github.com/Daft-Freak/DERP).
 
-### How did this project come about?
-Pico3D was created as part of a master's thesis at the Kempten University of Applied Sciences.  
-It was designed to answer the question of whether a modern $1 microcontroller could run a complete open world 3D game.
+### Where do I start as a developer?
+The main.cpp file contains a general overview of the game and engine. The most important Pico3D feature is going to be the render_triangle() function.
+This function basically does all of the hard work of transforming a triangle (in world space) and pushing it into the renderer (no deep engine/graphics knowledge needed!).  
+See the test models and the render_model_16bit functions for an example on how to put in your own meshes.
+
 
 ### How big can the world be?
 The included game has a grid size of 12x12 chunks (each chunk is 10x10m in size -> world size of 120x120m).  
@@ -51,8 +53,11 @@ Right now the game simply simulates all 50 NPCs and 50 zombies at the same time 
 It's also more realistic that way and uncovers any big issues in the self-made RNG ;).  
 Rendering is optimized with distance and view frustum culling.
 
+### How did this project come about?
+Pico3D was created as part of a master's thesis at the Kempten University of Applied Sciences.  
+It was designed to answer the question of whether a modern $1 microcontroller could run a complete open world 3D game.
 
-### What were the inspirations for the game world
+### What were the inspirations for the game world?
 The city itself was inspired heavily by Cyberpunk 2077 and the Yakuza series of games. The outskirts have a Legend of Zelda: Breath of the Wild influence.
 
 ### Why are there so many redundant functions in certain code areas like the zombie logic?  

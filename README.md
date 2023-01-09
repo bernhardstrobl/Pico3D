@@ -44,9 +44,8 @@ See the test models and the render_model_16bit functions for an example on how t
 ### How big can the world be?
 The included game has a grid size of 12x12 chunks (each chunk is 10x10m in size -> world size of 120x120m).  
 Right now the chunk cache uses an 8 bit int for each direction limiting the world size to 256x256 chunks (2.56x2.56km) but that can be easily extended.  
-A bigger issue is likely to be storage space since unless heavy use of repeat/procedurally chunks is made use of the binary is likely to exceed 16MB.  
-Plenty of creative procedural tricks are possible to get around this issue as well however if you want the next Daggerfall.
-Also, integer overflows are likely to occur earlier, although again easy enough to fix with an additional offset (future update).  
+A bigger issue is likely to be storage space since unless heavy use of repeat/procedurally chunks is made use of the binary is likely to exceed 16MB. Plenty of creative procedural tricks are possible to get around this issue as well however if you want the next Daggerfall.
+Also, integer overflows are likely to occur earlier (after around 32x32 chunks), although again easy enough to fix with an additional offset.  
 
 ### How are the NPCs loaded in/out?
 Right now the game simply simulates all 50 NPCs and 50 zombies at the same time since that is pretty cheap compared to the actual rendering.  

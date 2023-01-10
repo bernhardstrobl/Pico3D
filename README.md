@@ -1,4 +1,4 @@
-# Pico3D Engine for the Pimoroni PicoSystem
+# Pico3D Open World 3D Engine for the Pimoroni PicoSystem
 
 ![Pico3D preview](docs/pico3d.jpg)
 

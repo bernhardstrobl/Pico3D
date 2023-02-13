@@ -31,6 +31,17 @@ void render_triangle(struct triangle_32 &in) {
         return;
     }
 
+    //if we are dealing with large worlds, reset position close to origin
+    #ifndef NO_GLOBAL_OFFSET
+    in.vertex1.x -= global_offset_x * CHUNK_SIZE;
+    in.vertex2.x -= global_offset_x * CHUNK_SIZE;
+    in.vertex3.x -= global_offset_x * CHUNK_SIZE;
+
+    in.vertex1.z -= global_offset_z * CHUNK_SIZE;
+    in.vertex2.z -= global_offset_z * CHUNK_SIZE;
+    in.vertex3.z -= global_offset_z * CHUNK_SIZE;
+    #endif
+
     int32_t z_near = ZNEAR * FIXED_POINT_FACTOR * FIXED_POINT_FACTOR;
 
     struct triangle_32 output_triangle;

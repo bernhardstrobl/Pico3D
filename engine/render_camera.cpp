@@ -1,7 +1,4 @@
 //camera functions
-
-
-//camera functions
 float dot_product3(float vec1[3], float vec2[3]) {
     return(vec1[0] * vec2[0] + vec1[1] * vec2[1] +vec1[2] * vec2[2]);
 }
@@ -80,6 +77,50 @@ void move_camera(float move) {
         camera_position[0] -= mat_out[0][3];
         camera_position[2] -= mat_out[2][3];
     }
+    #endif
+
+}
+
+void render_view_projection() {
+    //we prepare the matrix to convert objects from world to view/projection space
+    #ifdef NO_GLOBAL_OFFSET
+        float mat_vp_float[4][4];
+        mat_mul(mat_projection, mat_camera, mat_vp_float);
+
+        //convert the resulting matrix to integers
+        mat_convert_float_fixed(mat_vp_float, mat_vp);
+
+    //use global offsets for large worlds (a bit hacky!)
+    #else
+        float mat_vp_float[4][4];
+        float mat_camera_global[4][4];
+
+        float old_position_x = camera_position[0];
+        float old_position_z = camera_position[2];
+        
+        //calculate and update needed global offsets
+        global_offset_x = camera_position[0] / 10;
+        global_offset_z = camera_position[2] / 10;
+
+        //we update the camera position to the new one and move the camera
+        camera_position[0] -= global_offset_x * 10;
+        camera_position[2] -= global_offset_z * 10;
+
+        update_camera();
+
+        //restore old camera positions for future correct updates
+        camera_position[0] = old_position_x;
+        camera_position[2] = old_position_z;
+
+        //create fixed point camera position
+        camera_position_fixed_point[0] = float_to_int(camera_position[0]);
+        camera_position_fixed_point[1] = float_to_int(camera_position[1]);
+        camera_position_fixed_point[2] = float_to_int(camera_position[2]);
+
+        mat_mul(mat_projection, mat_camera, mat_vp_float);
+
+        //convert the resulting matrix to integers
+        mat_convert_float_fixed(mat_vp_float, mat_vp);
     #endif
 
 }

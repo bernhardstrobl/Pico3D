@@ -12,6 +12,7 @@ using namespace picosystem;
 //#define SKIP_START //skips the starting splash/menu and goes straight into normal gameplay (menu = 0)
 //#define FREE_ROAM //set to ignore chunk physics for player
 //#define DEBUG_SHADERS //debug shaders are those with shader_id >= 250
+//#define NO_GLOBAL_OFFSET //disables using a global offset to move triangles and camera closer to origin
 
 //Defines for performance profiling
 //#define DEBUG_INFO //adds information on core times and triangle counts in the main menu
@@ -170,6 +171,7 @@ void update(uint32_t tick) {
     }
     #endif
 
+    //load stationary npcs (shops/quest givers) if close to the player
     render_quest_npcs();
 
     //we prepare the triangles for the scenery/chunks here since the draw() function is already
@@ -210,12 +212,9 @@ void update(uint32_t tick) {
     animated_texture_offset = animated_texture_counter / 2;
 
 
-    //we prepare the matrix to convert objects from world to view/projection space
-    float mat_vp_float[4][4];
-    mat_mul(mat_projection, mat_camera, mat_vp_float);
+    //prepare combined view & projection matrix
+    render_view_projection();
 
-    //convert the resulting matrix to integers
-    mat_convert_float_fixed(mat_vp_float, mat_vp);
 
     #ifdef DEBUG_INFO
     if (skip_frame == 0) {
@@ -269,9 +268,6 @@ void draw(uint32_t tick) {
     render_gate();
 
 
-    //load stationary npcs (shops/quest givers) if close to the player
-
-
 
     //render zombies. Note we prioritize the zombies before NPCs in the city, as they share the same triangle budget.
     //Having them disappear in front of a player when running out of tris might be the difference between life & death ;)
@@ -305,6 +301,9 @@ void draw(uint32_t tick) {
     clear();
     */
 
+    //we can output complete 4x4 matrices if needed
+    //mat_debug(mat_camera, 0);
+    //mat_debug_fixed_point(mat_vp, 0);
 
     #ifdef DEBUG_INFO
     if (menu == MENU_MAIN) {

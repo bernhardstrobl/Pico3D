@@ -6,6 +6,12 @@
 
 int32_t logic_raycast(int32_t x, int32_t y, int32_t z, int32_t x_offset, int32_t y_offset, int32_t z_offset, int32_t screen_point_x, int32_t screen_point_y) {
 
+    //if we are dealing with large worlds, reset position close to origin
+    #ifndef NO_GLOBAL_OFFSET
+    x -= global_offset_x * CHUNK_SIZE;
+    z -= global_offset_z * CHUNK_SIZE;
+    #endif
+
     //Generate the 8 points
     struct vertex_32 point_list[8];
     point_list[0].x = x + x_offset;

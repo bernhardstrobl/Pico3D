@@ -143,9 +143,16 @@ color_t sky; //used by Core1 when clearing Framebuffer
 //3d transformation matrices
 //camera info
 float camera_position[3] = {0.0, 0.0, 0.0};
-int32_t camera_position_fixed_point[3] = {0, 0, 0}; //not always updated
+int32_t camera_position_fixed_point[3] = {0, 0, 0}; //only updated with update_camera()
 float pitch = 0;
 float yaw = 0;
+
+
+//offsets used to shift all meshes and camera closer to origin to prevent overflows and precision errors in large worlds
+#ifndef NO_GLOBAL_OFFSET
+    int32_t global_offset_x;
+    int32_t global_offset_z;
+#endif
 
 
 //view matrix 

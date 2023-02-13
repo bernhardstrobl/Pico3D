@@ -130,6 +130,17 @@ void render_lighting(struct triangle_32 &in) {
     int32_t chunk_x;
     int32_t chunk_y;
 
+    //if we are dealing with large worlds, put position back to original
+    #ifndef NO_GLOBAL_OFFSET
+    in.vertex1.x += global_offset_x * CHUNK_SIZE;
+    in.vertex2.x += global_offset_x * CHUNK_SIZE;
+    in.vertex3.x += global_offset_x * CHUNK_SIZE;
+
+    in.vertex1.z += global_offset_z * CHUNK_SIZE;
+    in.vertex2.z += global_offset_z * CHUNK_SIZE;
+    in.vertex3.z += global_offset_z * CHUNK_SIZE;
+    #endif
+
     chunk_locate(in.vertex1.x, in.vertex1.z, chunk_y, chunk_x);
 
     //if triangle can't be assigned to a correct chunk, return

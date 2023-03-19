@@ -1,4 +1,4 @@
-# Pico3D Open World 3D Engine for the Pimoroni PicoSystem
+# Pico3D Open World 3D Game Engine for the Pimoroni PicoSystem & RP2040 Microcontroller
 
 ![Pico3D preview](docs/pico3d.jpg)
 
@@ -35,7 +35,13 @@ You should now be able to compile all the examples including pico3d.
 ### I don't have a PicoSystem?!
 Check out [Daft's Emulator for RP2040](https://github.com/Daft-Freak/DERP).
 
-### Where do I start as a developer?
+### How did this project come about?
+Pico3D was created as part of a master's thesis at the Kempten University of Applied Sciences (Hochschule Kempten).  
+It was designed to answer the question of whether a modern $1 microcontroller could run a complete open world 3D game.
+The thesis is available [here](https://lavarails.com/download/open_world_3D_microcontroller.pdf) and should answer most of the design decisions behind the engine.
+
+### Where do I start?
+Check out the Blender tutorials on creating your own game worlds.
 The main.cpp file contains a general overview of the game and engine. The most important Pico3D feature is going to be the render_triangle() function.
 This function basically does all of the hard work of transforming a triangle (in world space) and pushing it into the renderer (no deep engine/graphics knowledge needed!).  
 See the test models and the render_model_16bit functions for an example on how to put in your own meshes.
@@ -50,9 +56,9 @@ Right now the game simply simulates all 50 NPCs and 50 zombies at the same time 
 It's also more realistic that way and uncovers any big issues in the self-made RNG ;).  
 Rendering is optimized with distance and view frustum culling.
 
-### How did this project come about?
-Pico3D was created as part of a master's thesis at the Kempten University of Applied Sciences.  
-It was designed to answer the question of whether a modern $1 microcontroller could run a complete open world 3D game.
+### What is the Gamescom version of the game? ###
+This version was used to demonstrate the engine at Gamescom and replaces the zombies with balloons to conform to USK ratings.
+It is left in the codebase to show how to make a possible variant of the game for developers.
 
 ### What were the inspirations for the game world?
 The city itself was inspired heavily by Cyberpunk 2077 and the Yakuza series of games. The outskirts have a Legend of Zelda: Breath of the Wild influence.

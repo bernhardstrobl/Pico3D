@@ -4,6 +4,7 @@
 #define INFO_TIMER 120 //display any info for around 3 seconds
 #define DIALOGUE_TIMER 200 //display spoken stuff by quest npcs for 5
 
+int32_t player_area = 0;
 
 int32_t info_time_remain = 0;
 int32_t info_display = 0;

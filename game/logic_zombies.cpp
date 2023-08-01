@@ -1,5 +1,7 @@
 //Controls zombie behavior. Similar to logic_npc but more complicated since it reacts to player behavior.
 
+struct npc zombie_list[MAX_ZOMBIES];
+
 void logic_zombies() {
 
     //destroy npcs if they are out of reach of player

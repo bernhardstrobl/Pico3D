@@ -34,6 +34,7 @@ set(GLOBAL_DEFINES)
 picosystem_executable(
     pico3d
     main.cpp
+    game/logic_random.cpp
 )
 
 

@@ -1,5 +1,7 @@
 //the demo logic takes care of moving the camera across the landscape to showcase the engine
 
+int32_t demo_progress = 0;
+
 void logic_demo() {
 
     //start of demo

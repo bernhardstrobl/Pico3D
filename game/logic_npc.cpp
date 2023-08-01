@@ -1,6 +1,8 @@
 //Controls NPC behavior in the city. Pretty similar to logic_zombies so some code duplication
 //helps to keep things separate though
 
+struct npc npc_list[MAX_NPCS];
+
 void logic_npc() {
 
     //destroy npcs if they are out of reach of player

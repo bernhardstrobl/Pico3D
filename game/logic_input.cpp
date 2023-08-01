@@ -1,6 +1,7 @@
 //handle inputs of the console
 
 
+int32_t brightness = 75;
 
 void logic_input() {
 

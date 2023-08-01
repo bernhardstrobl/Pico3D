@@ -1,5 +1,9 @@
 //handles npc logic for npcs that are important for the game storyline like quest givers and shop keepers
 
+int32_t close_npc;
+
+struct npc npc_quest_list[MAX_QUEST_NPCS];
+
 void init_quest_npcs() {
 
     //Guard at the gate

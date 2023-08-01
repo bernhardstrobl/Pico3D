@@ -1,6 +1,8 @@
 //display and handle different menus (main, shop and death etc.)
 //menus usually remove control in some way from the player by deactivating normal movement
 
+int32_t menu = MENU_START;
+
 void display_menu() {
 
     if (menu == MENU_MAIN) {

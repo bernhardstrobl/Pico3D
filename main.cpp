@@ -7,22 +7,6 @@
 
 using namespace picosystem;
 
-//Comment out/in defines if needed (for debugging)
-//#define GAMESCOM //enables tweaks for a gamescom version with peace loving balloons instead of zombies
-//#define SKIP_START //skips the starting splash/menu and goes straight into normal gameplay (menu = 0)
-//#define FREE_ROAM //set to ignore chunk physics for player
-//#define DEBUG_SHADERS //debug shaders are those with shader_id >= 250
-//#define NO_GLOBAL_OFFSET //disables using a global offset to move triangles and camera closer to origin
-
-//Defines for performance profiling
-//#define DEBUG_INFO //adds information on core times and triangle counts in the main menu
-//#define NO_NPCS //disable all npcs including Zombies
-//#define RASTERIZER_IN_FLASH //puts the render_rasterize function for core 1 into flash instead of scratch RAM
-//#define FRAME_COUNTER //tallies frametimes for performance analysis
-//#define CONTENTION_COUNTER //enables counters for RAM contention on the 4 main banks
-//#define CPU_LED_LOAD //CPU load on LED (Core1: Green-40fps, Yellow-20fps, Red-10fps), blue if core 0 overloaded (logic too slow)
-//#define BENCHMARK //starts a benchmark recording average frametime and rough fps counter (takes 3 minutes!)
-
 int32_t logic_time;
 int32_t show_battery = 0;
 

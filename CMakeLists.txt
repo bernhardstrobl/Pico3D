@@ -13,6 +13,24 @@ pico_sdk_init()
 # Find the PicoSystem SDK
 find_package(PICOSYSTEM REQUIRED)
 
+set(GLOBAL_DEFINES)
+
+#Comment out/in defines if needed (for debugging)
+#list(APPEND GLOBAL_DEFINES GAMESCOM) #enables tweaks for a gamescom version with peace loving balloons instead of zombies
+#list(APPEND GLOBAL_DEFINES SKIP_START) #skips the starting splash/menu and goes straight into normal gameplay (menu = 0)
+#list(APPEND GLOBAL_DEFINES FREE_ROAM) #set to ignore chunk physics for player
+#list(APPEND GLOBAL_DEFINES DEBUG_SHADERS) #debug shaders are those with shader_id >= 250
+#list(APPEND GLOBAL_DEFINES NO_GLOBAL_OFFSET) #disables using a global offset to move triangles and camera closer to origin
+
+#Defines for performance profiling
+#list(APPEND GLOBAL_DEFINES DEBUG_INFO) #adds information on core times and triangle counts in the main menu
+#list(APPEND GLOBAL_DEFINES NO_NPCS) #disable all npcs including Zombies
+#list(APPEND GLOBAL_DEFINES RASTERIZER_IN_FLASH) #puts the render_rasterize function for core 1 into flash instead of scratch RAM
+#list(APPEND GLOBAL_DEFINES FRAME_COUNTER) #tallies frametimes for performance analysis
+#list(APPEND GLOBAL_DEFINES CONTENTION_COUNTER) #enables counters for RAM contention on the 4 main banks
+#list(APPEND GLOBAL_DEFINES CPU_LED_LOAD) #CPU load on LED (Core1: Green-40fps, Yellow-20fps, Red-10fps), blue if core 0 overloaded (logic too slow)
+#list(APPEND GLOBAL_DEFINES BENCHMARK) #starts a benchmark recording average frametime and rough fps counter (takes 3 minutes!)
+
 picosystem_executable(
     pico3d
     main.cpp
@@ -22,5 +40,6 @@ picosystem_executable(
 pixel_double(pico3d)
 disable_startup_logo(pico3d)
 no_spritesheet(pico3d)
+target_compile_definitions(pico3d PUBLIC ${GLOBAL_DEFINES})
 target_compile_definitions(pico3d PUBLIC PICO_DIVIDER_IN_RAM=1)
 target_link_libraries(pico3d pico_multicore)

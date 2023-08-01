@@ -8,34 +8,33 @@ using namespace picosystem;
 
 //Graphics adjustments
 #define MAX_RENDER_TRIANGLES 1500 //Maximum triangles that should be passed to core 1 via triangle list (2x memory requirement!)
-uint32_t number_triangles = 0; //number of triangles to be rendered by core 1
+extern uint32_t number_triangles; //number of triangles to be rendered by core 1
 
-uint8_t skip_frame = 1; //notify update() function if a frame has been skipped
-uint8_t shader_override = 0; // change to use debug shaders
+extern uint8_t skip_frame; //notify update() function if a frame has been skipped
+extern uint8_t shader_override; // change to use debug shaders
 #ifdef DEBUG_INFO
-uint32_t rendered_triangles = 0;
+extern uint32_t rendered_triangles;
 #endif
 
 #ifdef FRAME_COUNTER
-uint32_t perf_25_below = 0;
-uint32_t perf_50_below = 0;
-uint32_t perf_75_below = 0;
-uint32_t perf_75_above = 0;
+extern uint32_t perf_25_below;
+extern uint32_t perf_50_below;
+extern uint32_t perf_75_below;
+extern uint32_t perf_75_above;
 #endif
 
 #ifdef BENCHMARK
-uint32_t perf_25_below = 0;
-uint32_t perf_50_below = 0;
-uint32_t perf_75_below = 0;
-uint32_t perf_75_above = 0;
+extern uint32_t perf_25_below;
+extern uint32_t perf_50_below;
+extern uint32_t perf_75_below;
+extern uint32_t perf_75_above;
 #endif
 
 //Framebuffer for second core to render into
-color_t framebuffer[SCREEN_WIDTH * SCREEN_HEIGHT] __attribute__ ((aligned (4))) = { };
-buffer_t *FRAMEBUFFER = buffer(SCREEN_WIDTH, SCREEN_HEIGHT, framebuffer);
-color_t *fb;
+extern  buffer_t *FRAMEBUFFER;
+extern color_t *fb;
 
-int16_t zbuffer[SCREEN_WIDTH * SCREEN_HEIGHT] __attribute__ ((aligned (4))) = { };
+extern int16_t zbuffer[SCREEN_WIDTH * SCREEN_HEIGHT];
 
 //full 32 bit fixed point vertex
 struct vertex_32 {
@@ -105,10 +104,8 @@ struct triangle_floating_point {
     union color_or_uv vertex_parameter3;
 };
 
-struct triangle_16 triangle_list1[MAX_RENDER_TRIANGLES]; //alternate between filling triangle lists on core 0
-struct triangle_16 triangle_list2[MAX_RENDER_TRIANGLES]; //and rendering their contents on core 1
-struct triangle_16 *triangle_list_current = triangle_list1; // current triangle list for core 0
-struct triangle_16 *triangle_list_next = triangle_list2; // next triangle list for core 1
+extern struct triangle_16 *triangle_list_current; // current triangle list for core 0
+extern struct triangle_16 *triangle_list_next; // next triangle list for core 1
 
 
 //textures are stored in a list so the rasterizer can access them by ID
@@ -133,39 +130,33 @@ struct chunk_lighting {
 };
 
 
-int8_t light_falloff = 0; //amount to decrease vertex colors by when lit/unlit
+extern int8_t light_falloff; //amount to decrease vertex colors by when lit/unlit
 #define MAX_FALLOFF 4
 #define LIGHT_DISTANCE (FIXED_POINT_FACTOR * 50000) //distance to a light source in which vertices are still lit
-color_t sky; //used by Core1 when clearing Framebuffer
+extern color_t sky; //used by Core1 when clearing Framebuffer
 
 
 
 //3d transformation matrices
 //camera info
-float camera_position[3] = {0.0, 0.0, 0.0};
-int32_t camera_position_fixed_point[3] = {0, 0, 0}; //only updated with update_camera()
-float pitch = 0;
-float yaw = 0;
+extern float camera_position[3];
+extern int32_t camera_position_fixed_point[3]; //only updated with update_camera()
+extern float pitch;
+extern float yaw;
 
 
 //offsets used to shift all meshes and camera closer to origin to prevent overflows and precision errors in large worlds
 #ifndef NO_GLOBAL_OFFSET
-    int32_t global_offset_x;
-    int32_t global_offset_z;
+    extern int32_t global_offset_x;
+    extern int32_t global_offset_z;
 #endif
 
 
 //view matrix 
-float mat_camera[4][4] = {{ 1.0, 0.0, 0.0, 0.0},
-                          { 0.0, 1.0, 0.0, 0.0},
-                          { 0.0, 0.0, 1.0, 0.0},
-                          { 0.0, 0.0, 0.0, 1.0}};
+extern float mat_camera[4][4];
 
 //camera matrix (local space)
-float mat_cam_rotate[4][4] = {{ 1.0, 0.0, 0.0, 0.0},
-                              { 0.0, 1.0, 0.0, 0.0},
-                              { 0.0, 0.0, 1.0, 0.0},
-                              { 0.0, 0.0, 0.0, 1.0}};
+extern float mat_cam_rotate[4][4];
 
 
 
@@ -177,18 +168,9 @@ float mat_cam_rotate[4][4] = {{ 1.0, 0.0, 0.0, 0.0},
 #define CAMERA_FOVX 180.0
 #define CAMERA_FOVY 180.0
 
-//perspective projection matrix
-float mat_projection[4][4] = {{ atan((CAMERA_FOVX * PI / 180) * 0.5), 0.0, 0.0, 0.0},
-                              { 0.0, atan((CAMERA_FOVY * PI / 180) * 0.5), 0.0, 0.0},
-                              { 0.0, 0.0, -((ZFAR + ZNEAR) / (ZFAR - ZNEAR)), -((2.0*ZFAR*ZNEAR) / (ZFAR - ZNEAR))},
-                              { 0.0, 0.0, -1.0, 0.0}};
-
 
 //final fixed_point transform matrix for rendering (view * projection)
-int32_t mat_vp[4][4] = {{ 0, 0, 0, 0},
-                        { 0, 0, 0, 0},
-                        { 0, 0, 0, 0},
-                        { 0, 0, 0, 0}};
+extern int32_t mat_vp[4][4];
 
 /*
 //Orthogonal camera (if anyone needs it)

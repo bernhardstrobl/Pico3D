@@ -2,6 +2,13 @@
 
 using namespace picosystem;
 
+#if defined(FRAME_COUNTER) || defined(BENCHMARK)
+uint32_t perf_25_below = 0;
+uint32_t perf_50_below = 0;
+uint32_t perf_75_below = 0;
+uint32_t perf_75_above = 0;
+#endif
+
 int32_t render_sync() {
 
 

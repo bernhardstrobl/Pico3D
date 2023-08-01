@@ -6,6 +6,16 @@
 
 using namespace picosystem;
 
+uint8_t shader_override = 0;
+
+static color_t framebuffer[SCREEN_WIDTH * SCREEN_HEIGHT] __attribute__ ((aligned (4))) = { };
+buffer_t *FRAMEBUFFER = buffer(SCREEN_WIDTH, SCREEN_HEIGHT, framebuffer);
+color_t *fb;
+
+int16_t zbuffer[SCREEN_WIDTH * SCREEN_HEIGHT] __attribute__ ((aligned (4))) = { };
+
+color_t sky;
+
 int zbuffer_scale = FIXED_POINT_FACTOR / 16;
 
 uint8_t animated_texture_offset = 0;

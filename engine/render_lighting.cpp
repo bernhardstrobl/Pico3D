@@ -1,6 +1,7 @@
 //handles lighting calculations by collecting light data stored in each chunk.
 //every vertex is compared to the chunk it is in and the neighbouring chunks in a 3x3 fashion
 
+int8_t light_falloff = 0; 
 
 int32_t process_lighting(const struct light &light, vertex_32 &vertex, color_t &color) {
     

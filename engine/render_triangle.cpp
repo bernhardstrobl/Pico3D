@@ -1,6 +1,17 @@
 //function to transform incoming triangle, perform clipping & lighting and put it in the triangle list if visible
 //the triangle will then be rasterized by render_rasterize() on Core1 on the next frame
 
+uint32_t number_triangles = 0;
+
+#ifdef DEBUG_INFO
+uint32_t rendered_triangles = 0;
+#endif
+
+static struct triangle_16 triangle_list1[MAX_RENDER_TRIANGLES]; //alternate between filling triangle lists on core 0
+static struct triangle_16 triangle_list2[MAX_RENDER_TRIANGLES]; //and rendering their contents on core 1
+struct triangle_16 *triangle_list_current = triangle_list1; // current triangle list for core 0
+struct triangle_16 *triangle_list_next = triangle_list2; // next triangle list for core 1
+
 #define CODE_INSIDE 0
 #define CODE_LEFT 1
 #define CODE_RIGHT 2

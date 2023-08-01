@@ -1,3 +1,37 @@
+float camera_position[3] = {0.0, 0.0, 0.0};
+int32_t camera_position_fixed_point[3] = {0, 0, 0};
+float pitch = 0;
+float yaw = 0;
+
+#ifndef NO_GLOBAL_OFFSET
+    int32_t global_offset_x;
+    int32_t global_offset_z;
+#endif
+
+
+//view matrix 
+float mat_camera[4][4] = {{ 1.0, 0.0, 0.0, 0.0},
+                          { 0.0, 1.0, 0.0, 0.0},
+                          { 0.0, 0.0, 1.0, 0.0},
+                          { 0.0, 0.0, 0.0, 1.0}};
+
+//camera matrix (local space)
+float mat_cam_rotate[4][4] = {{ 1.0, 0.0, 0.0, 0.0},
+                              { 0.0, 1.0, 0.0, 0.0},
+                              { 0.0, 0.0, 1.0, 0.0},
+                              { 0.0, 0.0, 0.0, 1.0}};
+
+//perspective projection matrix
+float mat_projection[4][4] = {{ atan((CAMERA_FOVX * PI / 180) * 0.5), 0.0, 0.0, 0.0},
+                              { 0.0, atan((CAMERA_FOVY * PI / 180) * 0.5), 0.0, 0.0},
+                              { 0.0, 0.0, -((ZFAR + ZNEAR) / (ZFAR - ZNEAR)), -((2.0*ZFAR*ZNEAR) / (ZFAR - ZNEAR))},
+                              { 0.0, 0.0, -1.0, 0.0}};
+
+int32_t mat_vp[4][4] = {{ 0, 0, 0, 0},
+                        { 0, 0, 0, 0},
+                        { 0, 0, 0, 0},
+                        { 0, 0, 0, 0}};
+
 //camera functions
 float dot_product3(float vec1[3], float vec2[3]) {
     return(vec1[0] * vec2[0] + vec1[1] * vec2[1] +vec1[2] * vec2[2]);

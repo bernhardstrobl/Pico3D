@@ -10,6 +10,8 @@ using namespace picosystem;
 int32_t logic_time;
 int32_t show_battery = 0;
 
+uint8_t skip_frame = 1;
+
 #ifdef BENCHMARK
 #define NO_NPCS //disable npcs for predictable performance
 uint32_t avg_frametime = 0;

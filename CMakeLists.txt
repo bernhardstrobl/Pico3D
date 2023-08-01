@@ -7,6 +7,8 @@ project(pico32 C CXX ASM)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 
+option(GAMESCOM "Build gamescom version" OFF)
+
 # Initialize the Pico SDK
 pico_sdk_init()
 
@@ -15,8 +17,11 @@ find_package(PICOSYSTEM REQUIRED)
 
 set(GLOBAL_DEFINES)
 
+if(GAMESCOM)
+    list(APPEND GLOBAL_DEFINES GAMESCOM) #enables tweaks for a gamescom version with peace loving balloons instead of zombies
+endif()
+
 #Comment out/in defines if needed (for debugging)
-#list(APPEND GLOBAL_DEFINES GAMESCOM) #enables tweaks for a gamescom version with peace loving balloons instead of zombies
 #list(APPEND GLOBAL_DEFINES SKIP_START) #skips the starting splash/menu and goes straight into normal gameplay (menu = 0)
 #list(APPEND GLOBAL_DEFINES FREE_ROAM) #set to ignore chunk physics for player
 #list(APPEND GLOBAL_DEFINES DEBUG_SHADERS) #debug shaders are those with shader_id >= 250

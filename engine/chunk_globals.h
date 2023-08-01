@@ -20,10 +20,7 @@
 
 #define MAX_CHUNK_CACHE_TRIANGLES 1800 //the amount of triangles the chunk cache can store
 
-int32_t cached_triangles = 0; //amount of triangles currently in the cache
-
-int32_t current_chunk_x = -1;
-int32_t current_chunk_y = -1;
+extern int32_t cached_triangles; //amount of triangles currently in the cache
 
 //a single chunk points to its own triangle lists with geometry
 struct chunk{
@@ -34,7 +31,7 @@ struct chunk{
 
 
 //chunk cache is one big triangle list
-struct triangle_16 chunk_cache[MAX_CHUNK_CACHE_TRIANGLES];
+extern struct triangle_16 chunk_cache[MAX_CHUNK_CACHE_TRIANGLES];
 
 
 //chunk based physics

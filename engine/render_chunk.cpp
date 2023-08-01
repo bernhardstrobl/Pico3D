@@ -1,4 +1,10 @@
 //This file contains code on handling the loading of chunks from flash into the chunk array
+int32_t cached_triangles = 0; //amount of triangles currently in the cache
+
+static int32_t current_chunk_x = -1;
+static int32_t current_chunk_y = -1;
+
+struct triangle_16 chunk_cache[MAX_CHUNK_CACHE_TRIANGLES];
 
 
 //locate chunk based on location given in world coordinates (fixed point)

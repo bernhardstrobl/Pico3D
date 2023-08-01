@@ -1,4 +1,6 @@
+#include <cmath>
 #include "picosystem.hpp"
+
 //These are rendering globals, some needed by both cpu cores and multiple functions in the rendering subsystem
 using namespace picosystem;
 
@@ -185,3 +187,10 @@ float mat_projection[4][4] = {{ 1 / CAMERA_WIDTH, 0.0, 0.0, 0.0},
                               { 0.0, 0.0, -(2 / (ZFAR - ZNEAR)), -((ZFAR + ZNEAR) / (ZFAR - ZNEAR))},
                               { 0.0, 0.0, 0.0, 1.0}};
 */
+
+void update_camera();
+void move_camera(float move);
+
+uint32_t render_view_frustum_culling(int32_t x, int32_t y, int32_t z, int32_t x_offset, int32_t y_offset, int32_t z_offset);
+
+void render_triangle(struct triangle_32 &in);

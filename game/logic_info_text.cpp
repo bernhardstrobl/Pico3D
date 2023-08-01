@@ -1,8 +1,16 @@
 //displays text when a player changes areas, npcs leave comments and shows things like health/ammo in the outskirts etc.
 //this differs from menus in that information is only overlaid and movement is never compromised
+#include "picosystem.hpp"
+
+#include "logic_globals.h"
+#include "../engine/render_globals.h"
+#include "../engine/chunk_globals.h"
+
+using namespace picosystem;
 
 #define INFO_TIMER 120 //display any info for around 3 seconds
-#define DIALOGUE_TIMER 200 //display spoken stuff by quest npcs for 5
+
+extern int32_t show_battery;
 
 int32_t player_area = 0;
 

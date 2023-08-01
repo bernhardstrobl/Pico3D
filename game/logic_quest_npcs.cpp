@@ -1,4 +1,8 @@
 //handles npc logic for npcs that are important for the game storyline like quest givers and shop keepers
+#include "logic_globals.h"
+#include "../engine/render_globals.h"
+#include "../engine/render_math.h"
+#include "npc.h"
 
 int32_t close_npc;
 

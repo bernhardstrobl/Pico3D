@@ -1,6 +1,14 @@
 //the demo logic takes care of moving the camera across the landscape to showcase the engine
+#include "logic_globals.h"
+#include "../engine/render_globals.h"
 
 int32_t demo_progress = 0;
+
+#ifdef BENCHMARK
+extern uint32_t avg_frametime;
+extern uint32_t benchmark_frames;
+extern int32_t benchmark_complete;
+#endif
 
 void logic_demo() {
 

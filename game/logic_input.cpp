@@ -1,5 +1,11 @@
 //handle inputs of the console
 
+#include "logic_globals.h"
+#include "../engine/render_globals.h"
+
+using namespace picosystem;
+
+extern int32_t show_battery;
 
 int32_t brightness = 75;
 

@@ -1,3 +1,5 @@
+#include "picosystem.hpp"
+
 extern uint32_t global_time;
 
 #define QUARTER_DAY 16384 //duration of a quarter day in ms
@@ -63,6 +65,10 @@ extern int32_t demo_progress;
 #define QUEST_NPC_TALK_DISTANCE (FIXED_POINT_FACTOR * 3)
 extern int32_t close_npc; //if a player is close to a quest/shop npc, allow the use of the A button to talk
 
+#define DIALOGUE_TIMER 200 //display spoken stuff by quest npcs for 5
+extern int32_t dialogue_time_remain;
+extern int32_t dialogue_display;
+
 #define QUEST_AMMO_COST 10
 #define QUEST_AMMO_PURCHASE 5
 #define QUEST_KILL_REWARD 3
@@ -102,7 +108,7 @@ struct npc{
     int8_t status = -1; //-1 is an unused npc
     int8_t direction; //direction npc is facing
     int16_t progress; //walking animations etc.
-    color_t shirt_color; //walking animations etc.
+    picosystem::color_t shirt_color; //walking animations etc.
     int8_t health; //health (only applies to zombies)
     int8_t dialogue; //the current dialogue of the quest npc
     int32_t x;
@@ -117,3 +123,30 @@ extern struct npc npc_quest_list[MAX_QUEST_NPCS];
 extern struct npc zombie_list[MAX_ZOMBIES];
 
 int32_t random(int32_t rand_min, int32_t rand_max);
+
+void logic_day_night_cycle();
+void logic_demo();
+void logic_events();
+void logic_grass();
+void logic_input();
+void logic_new_game();
+void logic_npc();
+void logic_player_area();
+void logic_shoot();
+void logic_zombies();
+
+void render_gate();
+
+void render_grass();
+
+void display_info();
+
+void display_menu();
+
+void render_npcs();
+
+void init_quest_npcs();
+void talk_quest_npc();
+void render_quest_npcs();
+
+void render_zombies();

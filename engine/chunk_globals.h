@@ -3,8 +3,8 @@
 
 //World size defined by the amount of chunks in x and y directions
 //This is currently handled by the Blender exporter and directly put into chunk_data.h
-//#define WORLD_SIZE_X 16 //amount of chunks in x orientation
-//#define WORLD_SIZE_Y 16 //amount of chunks in y orientation
+#define WORLD_SIZE_X 12 //amount of chunks in x orientation
+#define WORLD_SIZE_Y 12 //amount of chunks in y orientation
 
 #define CHUNK_SIZE (FIXED_POINT_FACTOR * 10) //10 meter size per chunk
 //starting location of chunks in world coordinates
@@ -37,6 +37,7 @@ extern struct triangle_16 chunk_cache[MAX_CHUNK_CACHE_TRIANGLES];
 //chunk based physics
 #define CHUNK_BORDER (FIXED_POINT_FACTOR * 1)
 
+extern uint8_t chunk_physics[12][12];
 
 //function definitions for common operations
 uint8_t chunk_traversable(int32_t x, int32_t y, uint8_t character_type);

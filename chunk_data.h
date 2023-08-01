@@ -1,5 +1,5 @@
-#define WORLD_SIZE_X 12
-#define WORLD_SIZE_Y 12
+//#define WORLD_SIZE_X 12
+//#define WORLD_SIZE_Y 12
 #define REPEAT_LOD0_0_0_1_3 22
 const struct triangle_16 repeat_lod0_0_0_1_3[REPEAT_LOD0_0_0_1_3] = {
 {{ -256, 290, 5631},{ -256, 5410, 5631},{ -256, 5410, 5119}, 2, 0, 0x3303, 0x3303, 0xb20b}

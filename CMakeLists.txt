@@ -19,6 +19,15 @@ set(GLOBAL_DEFINES)
 
 if(GAMESCOM)
     list(APPEND GLOBAL_DEFINES GAMESCOM) #enables tweaks for a gamescom version with peace loving balloons instead of zombies
+    set(ZOMBIE_SOURCES
+        game/gamescom/logic_balloon.cpp
+        game/gamescom/logic_shoot_balloon.cpp
+    )
+else()
+    set(ZOMBIE_SOURCES
+        game/logic_shoot.cpp
+        game/logic_zombies.cpp
+    )
 endif()
 
 #Comment out/in defines if needed (for debugging)
@@ -39,7 +48,19 @@ endif()
 picosystem_executable(
     pico3d
     main.cpp
+
+    game/logic_day_night_cycle.cpp
+    game/logic_demo.cpp
+    game/logic_events.cpp
+    game/logic_gate.cpp
+    game/logic_grass.cpp
+    game/logic_info_text.cpp
+    game/logic_input.cpp
+    game/logic_menu.cpp
+    game/logic_npc.cpp
+    game/logic_quest_npcs.cpp
     game/logic_random.cpp
+    ${ZOMBIE_SOURCES}
 )
 
 

@@ -1,3 +1,5 @@
+#include "logic_globals.h"
+#include "../engine/render_globals.h"
 
 uint32_t global_time;
 int8_t daylight = 0;

@@ -1,3 +1,8 @@
+#include "../logic_globals.h"
+#include "../../engine/render_globals.h"
+#include "../../engine/render_math.h"
+#include "../../engine/chunk_globals.h"
+
 //When shooting at something in the outskirts, see if a zombie is hit
 
 //basically this code does similar things to the frustum culling code, but additionaly

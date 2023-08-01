@@ -48,58 +48,6 @@ int32_t benchmark_complete = 0;
 #include "engine/render_chunk.cpp"
 
 
-//logic code for the example game is decoupled as much as possible in a separate folder
-#include "game/logic_day_night_cycle.cpp"
-#include "game/logic_info_text.cpp"
-#include "game/logic_menu.cpp"
-
-//Objects
-#include "game/grass.h"
-#include "game/logic_grass.cpp"
-#include "game/gate.h"
-#include "game/logic_gate.cpp"
-
-//NPCs
-#include "game/npc.h"
-#include "game/npcleft.h"
-#include "game/npcright.h"
-#include "game/logic_npc.cpp"
-
-#include "game/logic_quest_npcs.cpp"
-
-#ifdef GAMESCOM
-//Balloons for gamescom
-#include "game/gamescom/balloon.h"
-#include "game/gamescom/balloon_pop.h"
-#include "game/gamescom/logic_balloon.cpp"
-#include "game/gamescom/logic_shoot_balloon.cpp"
-
-#else
-
-//Zombies
-#include "game/zombie_fast_stand.h"
-#include "game/zombie_fast_left.h"
-#include "game/zombie_fast_right.h"
-#include "game/zombie_slouch.h"
-#include "game/zombie_dead.h"
-#include "game/zombie_attack.h"
-#include "game/logic_zombies.cpp"
-#include "game/logic_shoot.cpp"
-
-#endif
-
-//event handling
-#include "game/logic_demo.cpp"
-#include "game/logic_events.cpp"
-
-//input handling
-#include "game/logic_input.cpp"
-
-
-
-
-
-
 //set core 1 on its dedicated rasterization function
 void core1_entry() {
     while (1) {

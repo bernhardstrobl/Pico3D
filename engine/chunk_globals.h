@@ -3,8 +3,8 @@
 
 //World size defined by the amount of chunks in x and y directions
 //This is currently handled by the Blender exporter and directly put into chunk_data.h
-#define WORLD_SIZE_X 12 //amount of chunks in x orientation
-#define WORLD_SIZE_Y 12 //amount of chunks in y orientation
+//#define WORLD_SIZE_X 12 //amount of chunks in x orientation
+//#define WORLD_SIZE_Y 12 //amount of chunks in y orientation
 
 #define CHUNK_SIZE (FIXED_POINT_FACTOR * 10) //10 meter size per chunk
 //starting location of chunks in world coordinates

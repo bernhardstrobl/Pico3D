@@ -4,6 +4,8 @@
 #include "../engine/render_math.h"
 #include "../engine/chunk_globals.h"
 
+#include "../chunk_data.h"
+
 #include "zombie_fast_stand.h"
 #include "zombie_fast_left.h"
 #include "zombie_fast_right.h"

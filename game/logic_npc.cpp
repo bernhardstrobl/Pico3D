@@ -5,6 +5,8 @@
 #include "../engine/render_math.h"
 #include "../engine/chunk_globals.h"
 
+#include "../chunk_data.h"
+
 #include "npc.h"
 #include "npcleft.h"
 #include "npcright.h"

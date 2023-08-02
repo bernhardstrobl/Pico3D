@@ -5,6 +5,8 @@
 #include "../../engine/render_math.h"
 #include "../../engine/chunk_globals.h"
 
+#include "../chunk_data.h"
+
 #include "balloon.h"
 #include "balloon_pop.h"
 

@@ -48,6 +48,7 @@ endif()
 picosystem_executable(
     pico3d
     main.cpp
+    chunk_data.cpp
 
     game/logic_day_night_cycle.cpp
     game/logic_demo.cpp

@@ -35,19 +35,6 @@ int32_t benchmark_complete = 0;
 //#include "test_models/suzanne.h"
 
 
-//Rendering & chunk system code
-#include "engine/render_math.h"
-#include "engine/render_clipping.cpp"
-#include "engine/render_culling.cpp"
-#include "engine/render_lighting.cpp"
-#include "engine/render_triangle.cpp"
-#include "engine/render_camera.cpp"
-#include "engine/render_sync.cpp"
-#include "engine/render_rasterize.cpp"
-#include "engine/render_model.cpp"
-#include "engine/render_chunk.cpp"
-
-
 //set core 1 on its dedicated rasterization function
 void core1_entry() {
     while (1) {

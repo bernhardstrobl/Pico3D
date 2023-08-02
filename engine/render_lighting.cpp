@@ -1,5 +1,11 @@
 //handles lighting calculations by collecting light data stored in each chunk.
 //every vertex is compared to the chunk it is in and the neighbouring chunks in a 3x3 fashion
+#include "render_globals.h"
+#include "render_math.h"
+#include "chunk_globals.h"
+
+#include "../game/logic_globals.h" // player_area
+#include "../chunk_data.h" // chunk_lights, WORLD_SIZE_
 
 int8_t light_falloff = 0; 
 

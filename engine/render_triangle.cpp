@@ -1,5 +1,8 @@
 //function to transform incoming triangle, perform clipping & lighting and put it in the triangle list if visible
 //the triangle will then be rasterized by render_rasterize() on Core1 on the next frame
+#include "render_globals.h"
+#include "render_math.h"
+#include "chunk_globals.h"
 
 uint32_t number_triangles = 0;
 

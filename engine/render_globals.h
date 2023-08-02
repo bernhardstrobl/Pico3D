@@ -188,9 +188,27 @@ float mat_projection[4][4] = {{ 1 / CAMERA_WIDTH, 0.0, 0.0, 0.0},
                               { 0.0, 0.0, 0.0, 1.0}};
 */
 
+extern uint8_t animated_texture_offset;
+extern uint8_t animated_texture_counter;
+
 void update_camera();
 void move_camera(float move);
+void render_view_projection();
+
+void clip_single_triangle(uint8_t vertex_in_screen, int32_t mat_vp[4][4], struct triangle_32 &input_triangle, struct triangle_32 &output_triangle, int32_t w1, int32_t w2, int32_t w3);
+void clip_extra_triangle(uint8_t vertex_out_screen, int32_t mat_vp[4][4], struct triangle_32 &input_triangle, struct triangle_32 &output_triangle, struct triangle_32 &extra, int32_t w1, int32_t w2, int32_t w3);
 
 uint32_t render_view_frustum_culling(int32_t x, int32_t y, int32_t z, int32_t x_offset, int32_t y_offset, int32_t z_offset);
+
+void render_lighting(struct triangle_32 &in);
+
+void render_model_16bit(triangle_16 *model, int32_t triangle_count);
+void render_model_32bit(triangle_32 *model, int32_t triangle_count);
+void render_model_16bit_flash(const triangle_16 *model, int32_t triangle_count);
+void render_model_32bit_flash(const triangle_32 *model, int32_t triangle_count);
+
+void render_rasterize();
+
+int32_t render_sync();
 
 void render_triangle(struct triangle_32 &in);

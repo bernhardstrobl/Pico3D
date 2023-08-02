@@ -1,4 +1,5 @@
 // functions to render a single model
+#include "render_globals.h"
 
 //when using reduced 16 bit fixed point vertices (models smaller than 32 meters in each direction from local origin)
 void render_model_16bit(triangle_16 *model, int32_t triangle_count) {

@@ -1,3 +1,7 @@
+#include "render_globals.h"
+#include "render_math.h"
+#include "chunk_globals.h" // chunk_traversable
+
 float camera_position[3] = {0.0, 0.0, 0.0};
 int32_t camera_position_fixed_point[3] = {0, 0, 0};
 float pitch = 0;

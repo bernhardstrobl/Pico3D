@@ -1,4 +1,8 @@
+#include "pico/multicore.h"
+
 #include "picosystem.hpp"
+
+#include "render_globals.h"
 
 using namespace picosystem;
 
@@ -7,6 +11,10 @@ uint32_t perf_25_below = 0;
 uint32_t perf_50_below = 0;
 uint32_t perf_75_below = 0;
 uint32_t perf_75_above = 0;
+
+extern int32_t benchmark_complete;
+extern int32_t benchmark_frames;
+extern uint32_t avg_frametime;
 #endif
 
 int32_t render_sync() {

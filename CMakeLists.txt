@@ -50,6 +50,16 @@ picosystem_executable(
     main.cpp
     chunk_data.cpp
 
+    engine/render_camera.cpp
+    engine/render_chunk.cpp
+    engine/render_clipping.cpp
+    engine/render_culling.cpp
+    engine/render_lighting.cpp
+    engine/render_model.cpp
+    engine/render_rasterize.cpp
+    engine/render_sync.cpp
+    engine/render_triangle.cpp
+
     game/logic_day_night_cycle.cpp
     game/logic_demo.cpp
     game/logic_events.cpp

@@ -1,4 +1,6 @@
 //This file contains clipping code for the required near plane clipping
+#include "render_globals.h"
+#include "render_math.h"
 
 //produces a single clipped triangle if two vertices are behind the camera
 void clip_single_triangle(uint8_t vertex_in_screen, int32_t mat_vp[4][4], struct triangle_32 &input_triangle, struct triangle_32 &output_triangle, int32_t w1, int32_t w2, int32_t w3) {

@@ -1,5 +1,11 @@
+#include "pico/multicore.h"
+
 #include "picosystem.hpp"
 
+#include "render_globals.h"
+#include "render_math.h"
+
+#include "../chunk_data.h" // chunk_texture_list
 
 //all the shaders
 #include "shader_wireframe.cpp"

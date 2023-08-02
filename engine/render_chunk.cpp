@@ -1,4 +1,11 @@
 //This file contains code on handling the loading of chunks from flash into the chunk array
+#include "render_globals.h"
+#include "render_math.h"
+#include "chunk_globals.h"
+
+#include "../game/logic_globals.h" // global_time, player_area
+#include "../chunk_data.h" // lodN_chunks, WORLD_SIZE_
+
 int32_t cached_triangles = 0; //amount of triangles currently in the cache
 
 static int32_t current_chunk_x = -1;

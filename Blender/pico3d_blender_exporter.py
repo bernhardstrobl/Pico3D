@@ -5,6 +5,7 @@ bl_info = {
 }
 
 import bpy
+from os import path
 
 class Pico3dPanel(bpy.types.Panel):
     bl_idname = 'VIEW3D_PT_pico3d_panel'
@@ -98,7 +99,7 @@ class Pico3dExport(bpy.types.Operator):
                 mesh = bpy.data.meshes[meshname]
                 
                 
-                
+
                 output = self.generate_vertices(context, mesh, modelname, 1000, False) + '\n'
                 
                 #output += self.generate_textures()
@@ -119,44 +120,50 @@ class Pico3dExport(bpy.types.Operator):
             
             world_size_x = context.scene.world_size_x
             world_size_y = context.scene.world_size_y
-            
-            chunk_output = 'const struct chunk_flash lod0_chunks[WORLD_SIZE_X][WORLD_SIZE_Y] = {\n'
-            
+
+            header_output = ''
+            src_output = f'#include "{path.basename(file_path)}.h"\n#include "engine/render_globals.h"\n#include "engine/chunk_globals.h"\n'
+
+            # world size
+            header_output += '#define WORLD_SIZE_X ' + str(world_size_x) + '\n#define WORLD_SIZE_Y ' + str(world_size_y) + '\n'
+
             #First do lod0
             max_triangles = context.scene.lod0_triangle_limit
             
-            chunk_output = self.export_chunks(context, 0, max_triangles)
-            
-            file_output += '#define WORLD_SIZE_X ' + str(world_size_x) + '\n#define WORLD_SIZE_Y ' + str(world_size_y) + '\n'
-            file_output += chunk_output + '\n'
-            #print(triangle_output)
-            #print(chunk_output)
-            
-            
-            #reset values
-            chunk_output = 'const struct chunk_flash lod1_chunks[WORLD_SIZE_X][WORLD_SIZE_Y] = {\n'
-            
-            
+            chunk_decl, chunk_impl = self.export_chunks(context, 0, max_triangles)
+            header_output += chunk_decl
+            src_output += chunk_impl + '\n'
+
             #Then do lod1
             max_triangles = context.scene.lod1_triangle_limit
+
+            chunk_decl, chunk_impl = self.export_chunks(context, 1, max_triangles)
+            header_output += chunk_decl
+            src_output += chunk_impl + '\n'
+
+            # textures and lights
+            
+            textures_decl, textures_impl = self.generate_textures()
             
             
-            chunk_output = self.export_chunks(context, 1, max_triangles) + '\n'
+            lights_decl, lights_impl = self.generate_lights(context)
+
+            header_output += textures_decl + '\n' + lights_decl
+            src_output += textures_impl + '\n' +lights_impl
             
-            chunk_output += self.generate_textures() + '\n'
-            
-            
-            chunk_output += self.generate_lights(context)
-            
-            file_output += chunk_output
             #print(triangle_output)
             #print(chunk_output)
             
             if (file_path == ''):
-                print(file_output)
+                print(header_output)
+                print(src_output)
             else:
-                f = open(file_path, "w")
-                f.write(file_output)
+                f = open(file_path + '.h', "w")
+                f.write(header_output)
+                f.close()
+
+                f = open(file_path + '.cpp', "w")
+                f.write(src_output)
                 f.close()
 
                 
@@ -471,10 +478,15 @@ class Pico3dExport(bpy.types.Operator):
         world_size_y = context.scene.world_size_y
         
         repeat_chunk_list = []
+
+        chunk_decl = f'const struct chunk lod{lod}_chunks[WORLD_SIZE_X][WORLD_SIZE_Y]'
+
+        decl_output = f'extern {chunk_decl};\n'
         
-        chunk_output = 'const struct chunk lod' + str(lod) + '_chunks[WORLD_SIZE_X][WORLD_SIZE_Y] = {\n'
+        chunk_output = f'{chunk_decl} = {{\n'
+
         triangle_output = ''
-        
+
         
         for x in range(world_size_x):
             
@@ -493,8 +505,8 @@ class Pico3dExport(bpy.types.Operator):
                     
                     
                     triangle_output += self.generate_vertices(context, mesh, modelname, max_triangles, True) + "\n"
-                    
-                    
+
+
                     if y == world_size_y - 1:
                         chunk_output += '{' + modelname.upper() + ', 0, ' + modelname + '}\n'
                     else:
@@ -538,26 +550,31 @@ class Pico3dExport(bpy.types.Operator):
         chunk_output = triangle_output + chunk_output + '};'
         
         
-        return chunk_output
+        return decl_output, chunk_output
     
         
         
     def generate_textures(self):
+
+        texture_count = len(self.textures)
+        var_decl = f'struct texture chunk_texture_list[{texture_count}]'
+
+        textures_decl = f'extern {var_decl};'
+
         #if there are no textures to be added, exit
         if (len(self.texture_list) == 0):
             #print('no textures to be added')
-            return 'struct texture chunk_texture_list[0] = {};'
+            return textures_decl, f'{var_decl} = {{}};'
         
-            
-        texture_count = len(self.textures)
-        self.texture_list = 'struct texture chunk_texture_list[' + str(texture_count) + '] = {' + self.texture_list + '};'
+
+        self.texture_list = f'{var_decl} = {{' + self.texture_list + '};'
         
         #print(self.texture_data)
         #print(self.texture_list)
         
         output = self.texture_data + self.texture_list
         
-        return output
+        return textures_decl, output
     
     
     
@@ -568,8 +585,10 @@ class Pico3dExport(bpy.types.Operator):
         
         fixed_point_factor = context.scene.fixed_point_factor
         
-        lights = ''
-        chunk_lights = 'const struct chunk_lighting chunk_lights[' + str(world_size_x) + '][' + str(world_size_y) + '] = {'
+        var_decl = f'const struct chunk_lighting chunk_lights[{world_size_x}][{world_size_y}]'
+
+        decl_output = f'extern {var_decl};\n'
+        chunk_lights = f'{var_decl} = {{'
         
         chunk_light_data = ''
         
@@ -628,7 +647,7 @@ class Pico3dExport(bpy.types.Operator):
         output = chunk_light_data + chunk_lights
         #print(chunk_light_data)
         #print(chunk_lights)
-        return output
+        return decl_output, output
             
         
 

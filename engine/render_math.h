@@ -1,7 +1,5 @@
-#include "picosystem.hpp"
 //File with math functions mainly for rendering
 //Several functions have both fixed and floating point implementations
-using namespace picosystem;
 
 //When converting to fixed points, a scaling factor power 2 allows
 //the compiler to perform bit-shifts instead of more expensive divisions/multiplications

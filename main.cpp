@@ -40,6 +40,9 @@ uint32_t perf_75_above = 0;
 //#include "test_models/cube.h"
 //#include "test_models/suzanne.h"
 
+//Framebuffer for second core to render into
+static color_t framebuffer[SCREEN_WIDTH * SCREEN_HEIGHT] __attribute__ ((aligned (4))) = { };
+static buffer_t *FRAMEBUFFER = buffer(SCREEN_WIDTH, SCREEN_HEIGHT, framebuffer);
 
 //set core 1 on its dedicated rasterization function
 void core1_entry() {
@@ -48,7 +51,7 @@ void core1_entry() {
 
         //For each frame, we wait for the go ahead of core 0 to start rendering a frame
         num_triangle = multicore_fifo_pop_blocking();
-        uint32_t time = render_rasterize(num_triangle);
+        uint32_t time = render_rasterize(num_triangle, FRAMEBUFFER->data);
 
         //signal core 0 that we are done by giving processing time
         multicore_fifo_push_blocking(time);

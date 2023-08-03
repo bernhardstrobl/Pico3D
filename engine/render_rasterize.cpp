@@ -12,10 +12,7 @@ using namespace picosystem;
 
 uint8_t shader_override = 0;
 
-static color_t framebuffer[SCREEN_WIDTH * SCREEN_HEIGHT] __attribute__ ((aligned (4))) = { };
-buffer_t *FRAMEBUFFER = buffer(SCREEN_WIDTH, SCREEN_HEIGHT, framebuffer);
-
-int16_t zbuffer[SCREEN_WIDTH * SCREEN_HEIGHT] __attribute__ ((aligned (4))) = { };
+static int16_t zbuffer[SCREEN_WIDTH * SCREEN_HEIGHT] __attribute__ ((aligned (4))) = { };
 
 color_t sky;
 
@@ -34,14 +31,11 @@ uint8_t animated_texture_counter = 0;
 #define RASTERIZE_SECTION __scratch_x("render_rasterize")
 #endif
 
-uint32_t RASTERIZE_SECTION render_rasterize(uint32_t num_triangle) {
+uint32_t RASTERIZE_SECTION render_rasterize(uint32_t num_triangle, color_t *fb) {
 
     //Start timer on core1 for a single frame
     uint32_t time = time_us();
 
-    color_t *fb = FRAMEBUFFER->data;
-
-    
     //we clear the screen either to a default black color (Fastest at around 60us)
     //memset(fb, 0, SCREEN_WIDTH * SCREEN_HEIGHT * 2);
 

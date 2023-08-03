@@ -18,11 +18,6 @@ extern uint8_t shader_override; // change to use debug shaders
 extern uint32_t rendered_triangles;
 #endif
 
-//Framebuffer for second core to render into
-extern  buffer_t *FRAMEBUFFER;
-
-extern int16_t zbuffer[SCREEN_WIDTH * SCREEN_HEIGHT];
-
 //full 32 bit fixed point vertex
 struct vertex_32 {
     int32_t x;
@@ -192,7 +187,7 @@ void render_model_32bit(triangle_32 *model, int32_t triangle_count);
 void render_model_16bit_flash(const triangle_16 *model, int32_t triangle_count);
 void render_model_32bit_flash(const triangle_32 *model, int32_t triangle_count);
 
-uint32_t render_rasterize(uint32_t num_triangle);
+uint32_t render_rasterize(uint32_t num_triangle, color_t *fb);
 
 int32_t render_sync();
 

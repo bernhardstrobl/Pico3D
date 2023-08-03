@@ -104,6 +104,13 @@ extern int32_t dialogue_display;
 extern int32_t brightness; //default brightness set by picosystem sdk
 #define BACKLIGHT_INCREMENT 5
 
+//chunk based physics
+#define CHUNK_BORDER (FIXED_POINT_FACTOR * 1)
+
+extern uint8_t chunk_physics[12][12];
+
+uint8_t chunk_traversable(int32_t x, int32_t y, uint8_t character_type);
+
 struct npc{
     int8_t status = -1; //-1 is an unused npc
     int8_t direction; //direction npc is facing

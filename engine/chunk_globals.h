@@ -34,13 +34,8 @@ struct chunk{
 extern struct triangle_16 chunk_cache[MAX_CHUNK_CACHE_TRIANGLES];
 
 
-//chunk based physics
-#define CHUNK_BORDER (FIXED_POINT_FACTOR * 1)
-
-extern uint8_t chunk_physics[12][12];
 
 //function definitions for common operations
-uint8_t chunk_traversable(int32_t x, int32_t y, uint8_t character_type);
 void chunk_locate(int32_t x, int32_t y, int32_t &chunk_x, int32_t &chunk_y);
 
 void render_chunks();

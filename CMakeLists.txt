@@ -68,6 +68,7 @@ picosystem_executable(
     game/logic_input.cpp
     game/logic_menu.cpp
     game/logic_npc.cpp
+    game/logic_physics.cpp
     game/logic_quest_npcs.cpp
     game/logic_random.cpp
     ${ZOMBIE_SOURCES}

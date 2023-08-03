@@ -51,7 +51,13 @@ void core1_entry() {
 
         //For each frame, we wait for the go ahead of core 0 to start rendering a frame
         num_triangle = multicore_fifo_pop_blocking();
-        uint32_t time = render_rasterize(num_triangle, FRAMEBUFFER->data);
+
+        //Start timer on core1 for a single frame
+        uint32_t time = time_us();
+        render_rasterize(num_triangle, FRAMEBUFFER->data);
+
+        //Finally we get the total time which should not exceed 25ms/25000us
+        time = time_us() - time;
 
         //signal core 0 that we are done by giving processing time
         multicore_fifo_push_blocking(time);

@@ -1,5 +1,3 @@
-#include "picosystem.hpp"
-
 #include "render_globals.h"
 #include "render_math.h"
 
@@ -7,8 +5,6 @@
 
 //all the shaders
 #include "shader_wireframe.cpp"
-
-using namespace picosystem;
 
 uint8_t shader_override = 0;
 
@@ -28,13 +24,11 @@ uint8_t animated_texture_counter = 0;
 #ifdef RASTERIZER_IN_FLASH
 #define RASTERIZE_SECTION
 #else
+#include "pico/platform.h"
 #define RASTERIZE_SECTION __scratch_x("render_rasterize")
 #endif
 
-uint32_t RASTERIZE_SECTION render_rasterize(uint32_t num_triangle, color_t *fb) {
-
-    //Start timer on core1 for a single frame
-    uint32_t time = time_us();
+void RASTERIZE_SECTION render_rasterize(uint32_t num_triangle, color_t *fb) {
 
     //we clear the screen either to a default black color (Fastest at around 60us)
     //memset(fb, 0, SCREEN_WIDTH * SCREEN_HEIGHT * 2);
@@ -447,9 +441,4 @@ uint32_t RASTERIZE_SECTION render_rasterize(uint32_t num_triangle, color_t *fb) 
         }
 
     }
-
-    //Finally we get the total time which should not exceed 25ms/25000us
-    time = time_us() - time;
-
-    return time;
 }

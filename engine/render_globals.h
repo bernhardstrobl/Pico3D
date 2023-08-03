@@ -188,7 +188,7 @@ void render_model_32bit(triangle_32 *model, int32_t triangle_count);
 void render_model_16bit_flash(const triangle_16 *model, int32_t triangle_count);
 void render_model_32bit_flash(const triangle_32 *model, int32_t triangle_count);
 
-uint32_t render_rasterize(uint32_t num_triangle, color_t *fb);
+void render_rasterize(uint32_t num_triangle, color_t *fb);
 
 int32_t render_sync();
 

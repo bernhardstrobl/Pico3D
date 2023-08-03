@@ -12,6 +12,13 @@ int32_t menu = MENU_START;
 extern int32_t benchmark_complete;
 #endif
 
+#ifdef FRAME_COUNTER
+extern uint32_t perf_25_below;
+extern uint32_t perf_50_below;
+extern uint32_t perf_75_below;
+extern uint32_t perf_75_above;
+#endif
+
 void display_menu() {
 
     if (menu == MENU_MAIN) {

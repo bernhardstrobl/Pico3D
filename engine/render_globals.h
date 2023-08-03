@@ -18,20 +18,6 @@ extern uint8_t shader_override; // change to use debug shaders
 extern uint32_t rendered_triangles;
 #endif
 
-#ifdef FRAME_COUNTER
-extern uint32_t perf_25_below;
-extern uint32_t perf_50_below;
-extern uint32_t perf_75_below;
-extern uint32_t perf_75_above;
-#endif
-
-#ifdef BENCHMARK
-extern uint32_t perf_25_below;
-extern uint32_t perf_50_below;
-extern uint32_t perf_75_below;
-extern uint32_t perf_75_above;
-#endif
-
 //Framebuffer for second core to render into
 extern  buffer_t *FRAMEBUFFER;
 

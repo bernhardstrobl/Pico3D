@@ -34,7 +34,6 @@ extern uint32_t perf_75_above;
 
 //Framebuffer for second core to render into
 extern  buffer_t *FRAMEBUFFER;
-extern color_t *fb;
 
 extern int16_t zbuffer[SCREEN_WIDTH * SCREEN_HEIGHT];
 

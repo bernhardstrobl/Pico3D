@@ -16,7 +16,6 @@ uint8_t shader_override = 0;
 
 static color_t framebuffer[SCREEN_WIDTH * SCREEN_HEIGHT] __attribute__ ((aligned (4))) = { };
 buffer_t *FRAMEBUFFER = buffer(SCREEN_WIDTH, SCREEN_HEIGHT, framebuffer);
-color_t *fb;
 
 int16_t zbuffer[SCREEN_WIDTH * SCREEN_HEIGHT] __attribute__ ((aligned (4))) = { };
 
@@ -46,7 +45,7 @@ void __scratch_x("render_rasterize") render_rasterize() {
     //Start timer on core1 for a single frame
     uint32_t time = time_us();
 
-    fb = FRAMEBUFFER->data;
+    color_t *fb = FRAMEBUFFER->data;
 
     
     //we clear the screen either to a default black color (Fastest at around 60us)
@@ -99,9 +98,9 @@ void __scratch_x("render_rasterize") render_rasterize() {
 #ifdef DEBUG_SHADERS
         //once we have all 3 on screen vertex points, we can optionally choose to display a wireframe instead of rasterizing
         if (shader_id == 250) {
-            render_line(x1, y1, x2, y2);
-            render_line(x2, y2, x3, y3);
-            render_line(x3, y3, x1, y1);
+            render_line(fb, x1, y1, x2, y2);
+            render_line(fb, x2, y2, x3, y3);
+            render_line(fb, x3, y3, x1, y1);
             continue;
         }
 #endif

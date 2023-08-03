@@ -1,8 +1,9 @@
 #include <cmath>
-#include "picosystem.hpp"
+#include <cstdint>
 
 //These are rendering globals, some needed by both cpu cores and multiple functions in the rendering subsystem
-using namespace picosystem;
+
+using color_t = uint16_t;
 
 #define SCREEN_WIDTH  120
 #define SCREEN_HEIGHT 120

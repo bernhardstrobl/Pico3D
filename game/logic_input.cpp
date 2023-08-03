@@ -2,12 +2,29 @@
 
 #include "logic_globals.h"
 #include "../engine/render_globals.h"
+#include "../engine/render_math.h"
+#include "../engine/chunk_globals.h"
 
 using namespace picosystem;
 
 extern int32_t show_battery;
 
 int32_t brightness = 75;
+
+static void try_move_camera(float move) {
+    float old_cam_x = camera_position[0];
+    float old_cam_z = camera_position[2];
+
+    move_camera(move);
+
+#ifndef FREE_ROAM
+    // do collision detection if not free roam
+    if(!chunk_traversable(float_to_int(camera_position[0]), float_to_int(camera_position[2]), 0)) {
+        camera_position[0] = old_cam_x;
+        camera_position[2] = old_cam_z;
+    }
+#endif
+}
 
 void logic_input() {
 
@@ -38,13 +55,13 @@ void logic_input() {
 
         //Forward
         if (button(UP) == true) {
-            move_camera(INPUT_SENSITIVITY);
+            try_move_camera(INPUT_SENSITIVITY);
             update_camera();
         }
 
         //Back
         if (button(DOWN) == true) {
-            move_camera(-INPUT_SENSITIVITY);
+            try_move_camera(-INPUT_SENSITIVITY);
             update_camera();
         }
 

@@ -1,6 +1,5 @@
 #include "render_globals.h"
 #include "render_math.h"
-#include "chunk_globals.h" // chunk_traversable
 
 float camera_position[3] = {0.0, 0.0, 0.0};
 int32_t camera_position_fixed_point[3] = {0, 0, 0};
@@ -99,24 +98,8 @@ void move_camera(float move) {
     
     mat_mul(rotation_matrix, translate_matrix, mat_out);
 
-
-    //add the positions to the camera x/z position directly when free roaming
-    #ifdef FREE_ROAM
     camera_position[0] -= mat_out[0][3];
     camera_position[2] -= mat_out[2][3];
-
-    //do collision detection first
-    #else
-    int32_t newx = camera_position_fixed_point[0] -= float_to_int(mat_out[0][3]);
-    int32_t newy = camera_position_fixed_point[2] -= float_to_int(mat_out[2][3]);
-
-    uint8_t traversable = chunk_traversable(newx, newy, 0);
-    if (traversable) {
-        camera_position[0] -= mat_out[0][3];
-        camera_position[2] -= mat_out[2][3];
-    }
-    #endif
-
 }
 
 void render_view_projection() {

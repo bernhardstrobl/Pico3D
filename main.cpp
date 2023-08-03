@@ -38,7 +38,14 @@ int32_t benchmark_complete = 0;
 //set core 1 on its dedicated rasterization function
 void core1_entry() {
     while (1) {
-        render_rasterize();
+        uint32_t num_triangle; //number of triangles we are asked to render
+
+        //For each frame, we wait for the go ahead of core 0 to start rendering a frame
+        num_triangle = multicore_fifo_pop_blocking();
+        uint32_t time = render_rasterize(num_triangle);
+
+        //signal core 0 that we are done by giving processing time
+        multicore_fifo_push_blocking(time);
     }
 }
 

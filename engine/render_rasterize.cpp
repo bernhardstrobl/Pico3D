@@ -1,5 +1,3 @@
-#include "pico/multicore.h"
-
 #include "picosystem.hpp"
 
 #include "render_globals.h"
@@ -31,16 +29,12 @@ uint8_t animated_texture_counter = 0;
 // --> Remove target_compile_definitions(pico3d PUBLIC PICO_DIVIDER_IN_RAM=1) in CMake file
 //Performance may otherwise be significantly hampered due to the veneers translating function calls between RAM/flash
 #ifdef RASTERIZER_IN_FLASH
-void render_rasterize() {
+#define RASTERIZE_SECTION
 #else
-void __scratch_x("render_rasterize") render_rasterize() {
+#define RASTERIZE_SECTION __scratch_x("render_rasterize")
 #endif
 
-    uint32_t num_triangle; //number of triangles we are asked to render
-
-    //For each frame, we wait for the go ahead of core 0 to start rendering a frame
-    num_triangle = multicore_fifo_pop_blocking();
-
+uint32_t RASTERIZE_SECTION render_rasterize(uint32_t num_triangle) {
 
     //Start timer on core1 for a single frame
     uint32_t time = time_us();
@@ -463,7 +457,5 @@ void __scratch_x("render_rasterize") render_rasterize() {
     //Finally we get the total time which should not exceed 25ms/25000us
     time = time_us() - time;
 
-    //signal core 0 that we are done by giving processing time
-    multicore_fifo_push_blocking(time);
-
+    return time;
 }

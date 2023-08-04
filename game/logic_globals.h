@@ -12,8 +12,6 @@ extern uint32_t global_time;
 #define NIGHT_G 1
 #define NIGHT_B 8
 
-extern int8_t daylight; //gives current quarter of day (0 - day, 1 - dusk, 2 - night, 3 - dawn)
-
 //Timeout game if no input detected at gamescom
 #ifdef GAMESCOM
 extern int32_t input_idle_timer;

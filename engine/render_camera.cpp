@@ -25,8 +25,8 @@ float mat_cam_rotate[4][4] = {{ 1.0, 0.0, 0.0, 0.0},
                               { 0.0, 0.0, 0.0, 1.0}};
 
 //perspective projection matrix
-float mat_projection[4][4] = {{ atan((CAMERA_FOVX * PI / 180) * 0.5), 0.0, 0.0, 0.0},
-                              { 0.0, atan((CAMERA_FOVY * PI / 180) * 0.5), 0.0, 0.0},
+float mat_projection[4][4] = {{ atanf((CAMERA_FOVX * PI / 180) * 0.5), 0.0, 0.0, 0.0},
+                              { 0.0, atanf((CAMERA_FOVY * PI / 180) * 0.5), 0.0, 0.0},
                               { 0.0, 0.0, -((ZFAR + ZNEAR) / (ZFAR - ZNEAR)), -((2.0*ZFAR*ZNEAR) / (ZFAR - ZNEAR))},
                               { 0.0, 0.0, -1.0, 0.0}};
 

@@ -158,7 +158,7 @@ void render_triangle(struct triangle_32 &in) {
 
     //early out if a tri beyond the view point frustum, culling in Z direction
     if (output_triangle.vertex1.z > FIXED_POINT_FACTOR || output_triangle.vertex2.z > FIXED_POINT_FACTOR || output_triangle.vertex3.z > FIXED_POINT_FACTOR
-        || output_triangle.vertex1.z < 0 || output_triangle.vertex2.z < 0 || output_triangle.vertex3.z < 0) {
+        || output_triangle.vertex1.z <= 0 || output_triangle.vertex2.z <= 0 || output_triangle.vertex3.z <= 0) {
         return;
     }
 

@@ -197,11 +197,11 @@ void RASTERIZE_SECTION render_rasterize(uint32_t num_triangle, color_t *fb) {
 
 
                 skipline = 1;
-                
+
 
                 int32_t w1 = (FIXED_POINT_FACTOR * edge1) / area;
                 int32_t w2 = (FIXED_POINT_FACTOR * edge2) / area;
-                int32_t w3 = (FIXED_POINT_FACTOR * edge3) / area;
+                int32_t w3 = FIXED_POINT_FACTOR - (w1 + w2);
 
                 //interpolated Z coordinate
                 int32_t z = ((FIXED_POINT_FACTOR * FIXED_POINT_FACTOR * FIXED_POINT_FACTOR) / (w1 * zi1 + w2 * zi2 + w3 * zi3));

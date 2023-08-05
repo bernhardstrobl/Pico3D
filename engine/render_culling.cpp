@@ -53,6 +53,9 @@ uint32_t render_view_frustum_culling(int32_t x, int32_t y, int32_t z, int32_t x_
     for (int i = 0; i < 8; i++) {
         int32_t w = ((mat_vp[3][0] * point_list[i].x) + (mat_vp[3][1] * point_list[i].y) + (mat_vp[3][2] * point_list[i].z) + (mat_vp[3][3] * FIXED_POINT_FACTOR)) / FIXED_POINT_FACTOR;
 
+        if(!w)
+            continue;
+
         int32_t output_z = (((mat_vp[2][0] * point_list[i].x) + (mat_vp[2][1] * point_list[i].y) + (mat_vp[2][2] * point_list[i].z) + (mat_vp[2][3] * FIXED_POINT_FACTOR))) / w;
 
         //discard points asap in z direction

@@ -153,6 +153,9 @@ void RASTERIZE_SECTION render_rasterize(uint32_t num_triangle, color_t *fb) {
         //precalculate area of triangle for later to find barycentric coordinates
         int32_t area = (x3 - x1) * (y2 - y1) - (y3 - y1) * (x2 - x1);
 
+        if(area == 0)
+            continue;
+
         //inverse Z coordinates
         int32_t zi1 = ((FIXED_POINT_FACTOR * FIXED_POINT_FACTOR) / triangle_list_current[current_triangle].vertex1.z);
         int32_t zi2 = ((FIXED_POINT_FACTOR * FIXED_POINT_FACTOR) / triangle_list_current[current_triangle].vertex2.z);

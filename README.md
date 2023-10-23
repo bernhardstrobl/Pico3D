@@ -15,13 +15,14 @@ It contains a small city as well as an outskirts featuring shootable zombies.
 
 If all you want are .uf2 binaries, check the releases for the newest version.
 
-You will need the [PicoSystem SDK](https://github.com/pimoroni/picosystem) (and the required Pico SDK).  
-Copy the whole Pico3D folder as an example project into picosystem/examples and add "add_subdirectory(pico3d)" entry into the CMakeLists.txt.
+You will need the [PicoSystem SDK](https://github.com/pimoroni/picosystem) and the [Pico SDK](https://github.com/raspberrypi/pico-sdk).  
 
-The project needs multi-core support to compile:  
-Add pico_multicore to the target_link_libraries in picosystem.cmake found in picosystem/libraries.
+Create a build folder and use the command to configure Cmake:
+```
+cmake -DPICO_SDK_PATH=/path/to/pico-sdk -DPICOSYSTEM_DIR=/path/to/ /picosystem path/to/Pico3D
+```
 
-You should now be able to compile all the examples including pico3d.
+and then use `make` to build a .uf2 file.
 
 
 ## Blender Tutorials

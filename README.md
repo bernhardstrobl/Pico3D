@@ -17,9 +17,9 @@ If all you want are .uf2 binaries, check the releases for the newest version.
 
 You will need the [PicoSystem SDK](https://github.com/pimoroni/picosystem) and the [Pico SDK](https://github.com/raspberrypi/pico-sdk).  
 
-Create a build folder and use the command to configure Cmake:
+Create and enter a build folder and use the following command to configure Cmake:
 ```
-cmake -DPICO_SDK_PATH=/path/to/pico-sdk -DPICOSYSTEM_DIR=/path/to/ /picosystem path/to/Pico3D
+cmake -DPICO_SDK_PATH=/path/to/pico-sdk -DPICOSYSTEM_DIR=/path/to/picosystem path/to/Pico3D
 ```
 
 and then use `make` to build a .uf2 file.

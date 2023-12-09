@@ -1,5 +1,8 @@
+#include "logic_globals.h"
+#include "../engine/render_globals.h"
 
-
+uint32_t global_time;
+static int8_t daylight = 0;
 
 //process sky color based on time, also provide color bias for shaders
 void logic_day_night_cycle() {

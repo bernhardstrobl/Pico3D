@@ -1,5 +1,18 @@
 //This file handles events that the player will encounter and changes game state if needed
+#include "logic_globals.h"
+#include "../engine/render_globals.h"
+#include "../engine/render_math.h"
 
+int32_t player_health = 100;
+int32_t player_ammo = 100;
+int32_t player_kills = 0;
+int32_t player_money = 100;
+
+static int32_t death_reset = 0;
+
+#ifdef GAMESCOM
+int32_t input_idle_timer = 0;
+#endif
 
 void logic_new_game() {
 

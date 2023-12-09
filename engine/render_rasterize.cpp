@@ -1,10 +1,16 @@
-#include "picosystem.hpp"
+#include "render_globals.h"
+#include "render_math.h"
 
+#include "../chunk_data.h" // chunk_texture_list
 
 //all the shaders
 #include "shader_wireframe.cpp"
 
-using namespace picosystem;
+uint8_t shader_override = 0;
+
+alignas(4) static int16_t zbuffer[SCREEN_WIDTH * SCREEN_HEIGHT] = { };
+
+color_t sky;
 
 int zbuffer_scale = FIXED_POINT_FACTOR / 16;
 
@@ -16,23 +22,14 @@ uint8_t animated_texture_counter = 0;
 // --> Remove target_compile_definitions(pico3d PUBLIC PICO_DIVIDER_IN_RAM=1) in CMake file
 //Performance may otherwise be significantly hampered due to the veneers translating function calls between RAM/flash
 #ifdef RASTERIZER_IN_FLASH
-void render_rasterize() {
+#define RASTERIZE_SECTION
 #else
-void __scratch_x("render_rasterize") render_rasterize() {
+#include "pico/platform.h"
+#define RASTERIZE_SECTION __scratch_x("render_rasterize")
 #endif
 
-    uint32_t num_triangle; //number of triangles we are asked to render
+void RASTERIZE_SECTION render_rasterize(uint32_t num_triangle, color_t *fb) {
 
-    //For each frame, we wait for the go ahead of core 0 to start rendering a frame
-    num_triangle = multicore_fifo_pop_blocking();
-
-
-    //Start timer on core1 for a single frame
-    uint32_t time = time_us();
-
-    fb = FRAMEBUFFER->data;
-
-    
     //we clear the screen either to a default black color (Fastest at around 60us)
     //memset(fb, 0, SCREEN_WIDTH * SCREEN_HEIGHT * 2);
 
@@ -83,9 +80,9 @@ void __scratch_x("render_rasterize") render_rasterize() {
 #ifdef DEBUG_SHADERS
         //once we have all 3 on screen vertex points, we can optionally choose to display a wireframe instead of rasterizing
         if (shader_id == 250) {
-            render_line(x1, y1, x2, y2);
-            render_line(x2, y2, x3, y3);
-            render_line(x3, y3, x1, y1);
+            render_line(fb, x1, y1, x2, y2);
+            render_line(fb, x2, y2, x3, y3);
+            render_line(fb, x3, y3, x1, y1);
             continue;
         }
 #endif
@@ -155,7 +152,10 @@ void __scratch_x("render_rasterize") render_rasterize() {
 
         //precalculate area of triangle for later to find barycentric coordinates
         int32_t area = (x3 - x1) * (y2 - y1) - (y3 - y1) * (x2 - x1);
-        
+
+        if(area == 0)
+            continue;
+
         //inverse Z coordinates
         int32_t zi1 = ((FIXED_POINT_FACTOR * FIXED_POINT_FACTOR) / triangle_list_current[current_triangle].vertex1.z);
         int32_t zi2 = ((FIXED_POINT_FACTOR * FIXED_POINT_FACTOR) / triangle_list_current[current_triangle].vertex2.z);
@@ -197,11 +197,11 @@ void __scratch_x("render_rasterize") render_rasterize() {
 
 
                 skipline = 1;
-                
+
 
                 int32_t w1 = (FIXED_POINT_FACTOR * edge1) / area;
                 int32_t w2 = (FIXED_POINT_FACTOR * edge2) / area;
-                int32_t w3 = (FIXED_POINT_FACTOR * edge3) / area;
+                int32_t w3 = FIXED_POINT_FACTOR - (w1 + w2);
 
                 //interpolated Z coordinate
                 int32_t z = ((FIXED_POINT_FACTOR * FIXED_POINT_FACTOR * FIXED_POINT_FACTOR) / (w1 * zi1 + w2 * zi2 + w3 * zi3));
@@ -444,11 +444,4 @@ void __scratch_x("render_rasterize") render_rasterize() {
         }
 
     }
-
-    //Finally we get the total time which should not exceed 25ms/25000us
-    time = time_us() - time;
-
-    //signal core 0 that we are done by giving processing time
-    multicore_fifo_push_blocking(time);
-
 }

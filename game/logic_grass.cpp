@@ -1,3 +1,10 @@
+#include "logic_globals.h"
+#include "../engine/render_globals.h"
+#include "../engine/render_math.h"
+#include "../engine/chunk_globals.h"
+
+#include "grass.h"
+
 #define GRASS_DEPTH 10
 #define GRASS_DISTANCE 512 //in fixed point
 #define GRASS_SWAY 512

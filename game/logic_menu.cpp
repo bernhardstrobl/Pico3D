@@ -1,5 +1,23 @@
 //display and handle different menus (main, shop and death etc.)
 //menus usually remove control in some way from the player by deactivating normal movement
+#include "picosystem.hpp"
+
+#include "logic_globals.h"
+
+using namespace picosystem;
+
+int32_t menu = MENU_START;
+
+#ifdef BENCHMARK
+extern int32_t benchmark_complete;
+#endif
+
+#ifdef FRAME_COUNTER
+extern uint32_t perf_25_below;
+extern uint32_t perf_50_below;
+extern uint32_t perf_75_below;
+extern uint32_t perf_75_above;
+#endif
 
 void display_menu() {
 

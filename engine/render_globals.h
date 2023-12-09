@@ -1,6 +1,9 @@
-#include "picosystem.hpp"
+#include <cmath>
+#include <cstdint>
+
 //These are rendering globals, some needed by both cpu cores and multiple functions in the rendering subsystem
-using namespace picosystem;
+
+using color_t = uint16_t;
 
 #define SCREEN_WIDTH  120
 #define SCREEN_HEIGHT 120
@@ -8,34 +11,13 @@ using namespace picosystem;
 
 //Graphics adjustments
 #define MAX_RENDER_TRIANGLES 1500 //Maximum triangles that should be passed to core 1 via triangle list (2x memory requirement!)
-uint32_t number_triangles = 0; //number of triangles to be rendered by core 1
+extern uint32_t number_triangles; //number of triangles to be rendered by core 1
 
-uint8_t skip_frame = 1; //notify update() function if a frame has been skipped
-uint8_t shader_override = 0; // change to use debug shaders
+extern uint8_t skip_frame; //notify update() function if a frame has been skipped
+extern uint8_t shader_override; // change to use debug shaders
 #ifdef DEBUG_INFO
-uint32_t rendered_triangles = 0;
+extern uint32_t rendered_triangles;
 #endif
-
-#ifdef FRAME_COUNTER
-uint32_t perf_25_below = 0;
-uint32_t perf_50_below = 0;
-uint32_t perf_75_below = 0;
-uint32_t perf_75_above = 0;
-#endif
-
-#ifdef BENCHMARK
-uint32_t perf_25_below = 0;
-uint32_t perf_50_below = 0;
-uint32_t perf_75_below = 0;
-uint32_t perf_75_above = 0;
-#endif
-
-//Framebuffer for second core to render into
-color_t framebuffer[SCREEN_WIDTH * SCREEN_HEIGHT] __attribute__ ((aligned (4))) = { };
-buffer_t *FRAMEBUFFER = buffer(SCREEN_WIDTH, SCREEN_HEIGHT, framebuffer);
-color_t *fb;
-
-int16_t zbuffer[SCREEN_WIDTH * SCREEN_HEIGHT] __attribute__ ((aligned (4))) = { };
 
 //full 32 bit fixed point vertex
 struct vertex_32 {
@@ -105,10 +87,8 @@ struct triangle_floating_point {
     union color_or_uv vertex_parameter3;
 };
 
-struct triangle_16 triangle_list1[MAX_RENDER_TRIANGLES]; //alternate between filling triangle lists on core 0
-struct triangle_16 triangle_list2[MAX_RENDER_TRIANGLES]; //and rendering their contents on core 1
-struct triangle_16 *triangle_list_current = triangle_list1; // current triangle list for core 0
-struct triangle_16 *triangle_list_next = triangle_list2; // next triangle list for core 1
+extern struct triangle_16 *triangle_list_current; // current triangle list for core 0
+extern struct triangle_16 *triangle_list_next; // next triangle list for core 1
 
 
 //textures are stored in a list so the rasterizer can access them by ID
@@ -133,39 +113,33 @@ struct chunk_lighting {
 };
 
 
-int8_t light_falloff = 0; //amount to decrease vertex colors by when lit/unlit
+extern int8_t light_falloff; //amount to decrease vertex colors by when lit/unlit
 #define MAX_FALLOFF 4
 #define LIGHT_DISTANCE (FIXED_POINT_FACTOR * 50000) //distance to a light source in which vertices are still lit
-color_t sky; //used by Core1 when clearing Framebuffer
+extern color_t sky; //used by Core1 when clearing Framebuffer
 
 
 
 //3d transformation matrices
 //camera info
-float camera_position[3] = {0.0, 0.0, 0.0};
-int32_t camera_position_fixed_point[3] = {0, 0, 0}; //only updated with update_camera()
-float pitch = 0;
-float yaw = 0;
+extern float camera_position[3];
+extern int32_t camera_position_fixed_point[3]; //only updated with update_camera()
+extern float pitch;
+extern float yaw;
 
 
 //offsets used to shift all meshes and camera closer to origin to prevent overflows and precision errors in large worlds
 #ifndef NO_GLOBAL_OFFSET
-    int32_t global_offset_x;
-    int32_t global_offset_z;
+    extern int32_t global_offset_x;
+    extern int32_t global_offset_z;
 #endif
 
 
 //view matrix 
-float mat_camera[4][4] = {{ 1.0, 0.0, 0.0, 0.0},
-                          { 0.0, 1.0, 0.0, 0.0},
-                          { 0.0, 0.0, 1.0, 0.0},
-                          { 0.0, 0.0, 0.0, 1.0}};
+extern float mat_camera[4][4];
 
 //camera matrix (local space)
-float mat_cam_rotate[4][4] = {{ 1.0, 0.0, 0.0, 0.0},
-                              { 0.0, 1.0, 0.0, 0.0},
-                              { 0.0, 0.0, 1.0, 0.0},
-                              { 0.0, 0.0, 0.0, 1.0}};
+extern float mat_cam_rotate[4][4];
 
 
 
@@ -177,18 +151,9 @@ float mat_cam_rotate[4][4] = {{ 1.0, 0.0, 0.0, 0.0},
 #define CAMERA_FOVX 180.0
 #define CAMERA_FOVY 180.0
 
-//perspective projection matrix
-float mat_projection[4][4] = {{ atan((CAMERA_FOVX * PI / 180) * 0.5), 0.0, 0.0, 0.0},
-                              { 0.0, atan((CAMERA_FOVY * PI / 180) * 0.5), 0.0, 0.0},
-                              { 0.0, 0.0, -((ZFAR + ZNEAR) / (ZFAR - ZNEAR)), -((2.0*ZFAR*ZNEAR) / (ZFAR - ZNEAR))},
-                              { 0.0, 0.0, -1.0, 0.0}};
-
 
 //final fixed_point transform matrix for rendering (view * projection)
-int32_t mat_vp[4][4] = {{ 0, 0, 0, 0},
-                        { 0, 0, 0, 0},
-                        { 0, 0, 0, 0},
-                        { 0, 0, 0, 0}};
+extern int32_t mat_vp[4][4];
 
 /*
 //Orthogonal camera (if anyone needs it)
@@ -203,3 +168,28 @@ float mat_projection[4][4] = {{ 1 / CAMERA_WIDTH, 0.0, 0.0, 0.0},
                               { 0.0, 0.0, -(2 / (ZFAR - ZNEAR)), -((ZFAR + ZNEAR) / (ZFAR - ZNEAR))},
                               { 0.0, 0.0, 0.0, 1.0}};
 */
+
+extern uint8_t animated_texture_offset;
+extern uint8_t animated_texture_counter;
+
+void update_camera();
+void move_camera(float move);
+void render_view_projection();
+
+void clip_single_triangle(uint8_t vertex_in_screen, int32_t mat_vp[4][4], struct triangle_32 &input_triangle, struct triangle_32 &output_triangle, int32_t w1, int32_t w2, int32_t w3);
+void clip_extra_triangle(uint8_t vertex_out_screen, int32_t mat_vp[4][4], struct triangle_32 &input_triangle, struct triangle_32 &output_triangle, struct triangle_32 &extra, int32_t w1, int32_t w2, int32_t w3);
+
+uint32_t render_view_frustum_culling(int32_t x, int32_t y, int32_t z, int32_t x_offset, int32_t y_offset, int32_t z_offset);
+
+void render_lighting(struct triangle_32 &in);
+
+void render_model_16bit(triangle_16 *model, int32_t triangle_count);
+void render_model_32bit(triangle_32 *model, int32_t triangle_count);
+void render_model_16bit_flash(const triangle_16 *model, int32_t triangle_count);
+void render_model_32bit_flash(const triangle_32 *model, int32_t triangle_count);
+
+void render_rasterize(uint32_t num_triangle, color_t *fb);
+
+int32_t render_sync();
+
+void render_triangle(struct triangle_32 &in);

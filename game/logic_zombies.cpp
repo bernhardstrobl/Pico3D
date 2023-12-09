@@ -1,4 +1,19 @@
 //Controls zombie behavior. Similar to logic_npc but more complicated since it reacts to player behavior.
+#include "logic_globals.h"
+#include "../engine/render_globals.h"
+#include "../engine/render_math.h"
+#include "../engine/chunk_globals.h"
+
+#include "../chunk_data.h"
+
+#include "zombie_fast_stand.h"
+#include "zombie_fast_left.h"
+#include "zombie_fast_right.h"
+#include "zombie_slouch.h"
+#include "zombie_dead.h"
+#include "zombie_attack.h"
+
+struct npc zombie_list[MAX_ZOMBIES];
 
 void logic_zombies() {
 

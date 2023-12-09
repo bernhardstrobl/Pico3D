@@ -3,8 +3,8 @@
 
 //World size defined by the amount of chunks in x and y directions
 //This is currently handled by the Blender exporter and directly put into chunk_data.h
-//#define WORLD_SIZE_X 16 //amount of chunks in x orientation
-//#define WORLD_SIZE_Y 16 //amount of chunks in y orientation
+//#define WORLD_SIZE_X 12 //amount of chunks in x orientation
+//#define WORLD_SIZE_Y 12 //amount of chunks in y orientation
 
 #define CHUNK_SIZE (FIXED_POINT_FACTOR * 10) //10 meter size per chunk
 //starting location of chunks in world coordinates
@@ -20,10 +20,7 @@
 
 #define MAX_CHUNK_CACHE_TRIANGLES 1800 //the amount of triangles the chunk cache can store
 
-int32_t cached_triangles = 0; //amount of triangles currently in the cache
-
-int32_t current_chunk_x = -1;
-int32_t current_chunk_y = -1;
+extern int32_t cached_triangles; //amount of triangles currently in the cache
 
 //a single chunk points to its own triangle lists with geometry
 struct chunk{
@@ -34,13 +31,11 @@ struct chunk{
 
 
 //chunk cache is one big triangle list
-struct triangle_16 chunk_cache[MAX_CHUNK_CACHE_TRIANGLES];
+extern struct triangle_16 chunk_cache[MAX_CHUNK_CACHE_TRIANGLES];
 
-
-//chunk based physics
-#define CHUNK_BORDER (FIXED_POINT_FACTOR * 1)
 
 
 //function definitions for common operations
-uint8_t chunk_traversable(int32_t x, int32_t y, uint8_t character_type);
 void chunk_locate(int32_t x, int32_t y, int32_t &chunk_x, int32_t &chunk_y);
+
+void render_chunks();

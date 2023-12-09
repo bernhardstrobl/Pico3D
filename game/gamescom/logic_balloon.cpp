@@ -1,5 +1,17 @@
 //Controls zombie behavior. Similar to logic_npc but more complicated since it reacts to player behavior.
 
+#include "../logic_globals.h"
+#include "../../engine/render_globals.h"
+#include "../../engine/render_math.h"
+#include "../../engine/chunk_globals.h"
+
+#include "../chunk_data.h"
+
+#include "balloon.h"
+#include "balloon_pop.h"
+
+struct npc zombie_list[MAX_ZOMBIES];
+
 void logic_zombies() {
 
 

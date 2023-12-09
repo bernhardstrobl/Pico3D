@@ -7,24 +7,10 @@
 
 using namespace picosystem;
 
-//Comment out/in defines if needed (for debugging)
-//#define GAMESCOM //enables tweaks for a gamescom version with peace loving balloons instead of zombies
-//#define SKIP_START //skips the starting splash/menu and goes straight into normal gameplay (menu = 0)
-//#define FREE_ROAM //set to ignore chunk physics for player
-//#define DEBUG_SHADERS //debug shaders are those with shader_id >= 250
-//#define NO_GLOBAL_OFFSET //disables using a global offset to move triangles and camera closer to origin
-
-//Defines for performance profiling
-//#define DEBUG_INFO //adds information on core times and triangle counts in the main menu
-//#define NO_NPCS //disable all npcs including Zombies
-//#define RASTERIZER_IN_FLASH //puts the render_rasterize function for core 1 into flash instead of scratch RAM
-//#define FRAME_COUNTER //tallies frametimes for performance analysis
-//#define CONTENTION_COUNTER //enables counters for RAM contention on the 4 main banks
-//#define CPU_LED_LOAD //CPU load on LED (Core1: Green-40fps, Yellow-20fps, Red-10fps), blue if core 0 overloaded (logic too slow)
-//#define BENCHMARK //starts a benchmark recording average frametime and rough fps counter (takes 3 minutes!)
-
 int32_t logic_time;
 int32_t show_battery = 0;
+
+uint8_t skip_frame = 1;
 
 #ifdef BENCHMARK
 #define NO_NPCS //disable npcs for predictable performance
@@ -33,6 +19,12 @@ uint32_t benchmark_frames = 0;
 int32_t benchmark_complete = 0;
 #endif
 
+#if defined(FRAME_COUNTER) || defined(BENCHMARK)
+uint32_t perf_25_below = 0;
+uint32_t perf_50_below = 0;
+uint32_t perf_75_below = 0;
+uint32_t perf_75_above = 0;
+#endif
 
 #include "engine/render_globals.h"
 #include "engine/chunk_globals.h" //chunk settings
@@ -48,81 +40,114 @@ int32_t benchmark_complete = 0;
 //#include "test_models/cube.h"
 //#include "test_models/suzanne.h"
 
-
-//Rendering & chunk system code
-#include "engine/render_math.h"
-#include "engine/render_clipping.cpp"
-#include "engine/render_culling.cpp"
-#include "engine/render_lighting.cpp"
-#include "engine/render_triangle.cpp"
-#include "engine/render_camera.cpp"
-#include "engine/render_sync.cpp"
-#include "engine/render_rasterize.cpp"
-#include "engine/render_model.cpp"
-#include "engine/render_chunk.cpp"
-
-
-//logic code for the example game is decoupled as much as possible in a separate folder
-#include "game/logic_day_night_cycle.cpp"
-#include "game/logic_info_text.cpp"
-#include "game/logic_menu.cpp"
-
-//Objects
-#include "game/grass.h"
-#include "game/logic_grass.cpp"
-#include "game/gate.h"
-#include "game/logic_gate.cpp"
-
-//NPCs
-#include "game/npc.h"
-#include "game/npcleft.h"
-#include "game/npcright.h"
-#include "game/logic_npc.cpp"
-
-#include "game/logic_quest_npcs.cpp"
-
-#ifdef GAMESCOM
-//Balloons for gamescom
-#include "game/gamescom/balloon.h"
-#include "game/gamescom/balloon_pop.h"
-#include "game/gamescom/logic_balloon.cpp"
-#include "game/gamescom/logic_shoot_balloon.cpp"
-
-#else
-
-//Zombies
-#include "game/zombie_fast_stand.h"
-#include "game/zombie_fast_left.h"
-#include "game/zombie_fast_right.h"
-#include "game/zombie_slouch.h"
-#include "game/zombie_dead.h"
-#include "game/zombie_attack.h"
-#include "game/logic_zombies.cpp"
-#include "game/logic_shoot.cpp"
-
-#endif
-
-//event handling
-#include "game/logic_demo.cpp"
-#include "game/logic_events.cpp"
-
-//input handling
-#include "game/logic_input.cpp"
-
-
-
-
-
+//Framebuffer for second core to render into
+static color_t framebuffer[SCREEN_WIDTH * SCREEN_HEIGHT] __attribute__ ((aligned (4))) = { };
+static buffer_t *FRAMEBUFFER = buffer(SCREEN_WIDTH, SCREEN_HEIGHT, framebuffer);
 
 //set core 1 on its dedicated rasterization function
 void core1_entry() {
     while (1) {
-        render_rasterize();
+        uint32_t num_triangle; //number of triangles we are asked to render
+
+        //For each frame, we wait for the go ahead of core 0 to start rendering a frame
+        num_triangle = multicore_fifo_pop_blocking();
+
+        //Start timer on core1 for a single frame
+        uint32_t time = time_us();
+        render_rasterize(num_triangle, FRAMEBUFFER->data);
+
+        //Finally we get the total time which should not exceed 25ms/25000us
+        time = time_us() - time;
+
+        //signal core 0 that we are done by giving processing time
+        multicore_fifo_push_blocking(time);
     }
 }
 
 
 
+
+int32_t render_sync() {
+
+
+    uint32_t core1_time = 0;
+
+    //we have to check if core 1 has completed its task
+    //if it has, we can swap framebuffers and triangle lists
+    if (multicore_fifo_pop_timeout_us(5, &core1_time)) {
+        //instead of copying the framebuffer to the screen buffer (which is wasteful),
+        //we simply swap in the framebuffer as the new screen buffer and use the old
+        //screen buffer as the new framebuffer
+        buffer_t *TEMP_FB;
+        TEMP_FB = SCREEN;
+        SCREEN = FRAMEBUFFER;
+        FRAMEBUFFER = TEMP_FB;
+        target(SCREEN);
+
+
+        //swap triangle lists
+        struct triangle_16 *temp_triangle_list;
+        temp_triangle_list = triangle_list_current;
+        triangle_list_current = triangle_list_next;
+        triangle_list_next = temp_triangle_list;
+        
+
+        //if any writes to flash memory are to be done, do it here before core1 is released
+
+
+
+        //once we have done all the needed transfers, we can tell core 1 to start rasterizing again
+        //as argument we pass the expected amount of triangles to render
+        multicore_fifo_push_blocking(number_triangles);
+
+
+        //performance counters
+        #ifdef BENCHMARK
+            if (benchmark_complete == 0) {
+                if (core1_time < 25000) {
+                    perf_25_below++;
+                } else if (core1_time < 50000) {
+                    perf_50_below++;
+                } else if (core1_time < 75000) {
+                    perf_75_below++;
+                } else if (core1_time >= 75000) {
+                    perf_75_above++;
+                }
+                benchmark_frames++;
+                avg_frametime += core1_time;
+            }
+        #elif FRAME_COUNTER
+            if (core1_time < 25000) {
+                perf_25_below++;
+            } else if (core1_time < 50000) {
+                perf_50_below++;
+            } else if (core1_time < 75000) {
+                perf_75_below++;
+            } else if (core1_time >= 75000) {
+                perf_75_above++;
+            }
+        #endif
+
+
+    //if core 1 is still rendering, we have to keep the old frame and old triangle lists
+    } else {
+        //skipped_frames++;
+    }
+
+
+    #ifdef CPU_LED_LOAD
+    if (core1_time > 50000) {
+        led(25, 0, 0);
+    } else if (core1_time > 25000) {
+        led(25, 25, 0);
+    } else if (core1_time > 0) {
+        led(0, 25, 0);
+    }
+    #endif
+
+
+    return core1_time;
+}
 
 void init() {
     //Launch the rasterizer on core 1

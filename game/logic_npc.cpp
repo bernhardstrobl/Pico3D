@@ -1,5 +1,17 @@
 //Controls NPC behavior in the city. Pretty similar to logic_zombies so some code duplication
 //helps to keep things separate though
+#include "logic_globals.h"
+#include "../engine/render_globals.h"
+#include "../engine/render_math.h"
+#include "../engine/chunk_globals.h"
+
+#include "../chunk_data.h"
+
+#include "npc.h"
+#include "npcleft.h"
+#include "npcright.h"
+
+struct npc npc_list[MAX_NPCS];
 
 void logic_npc() {
 

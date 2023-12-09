@@ -1,6 +1,12 @@
 //handles lighting calculations by collecting light data stored in each chunk.
 //every vertex is compared to the chunk it is in and the neighbouring chunks in a 3x3 fashion
+#include "render_globals.h"
+#include "render_math.h"
+#include "chunk_globals.h"
 
+#include "../chunk_data.h" // chunk_lights, WORLD_SIZE_
+
+int8_t light_falloff = 0; 
 
 int32_t process_lighting(const struct light &light, vertex_32 &vertex, color_t &color) {
     
@@ -118,7 +124,7 @@ void vertex_lighting(struct vertex_32 &in, color_t &color, int16_t chunk_x, int1
 void render_lighting(struct triangle_32 &in) {
 
     //only perform lighting if player is in the city and there is an actual falloff to calculate
-    if (player_area == AREA_OUTSKIRTS || light_falloff == 0) {
+    if (/*player_area == AREA_OUTSKIRTS || */light_falloff == 0) {
         return;
     }
 

@@ -1,4 +1,7 @@
 //provides view-frustum culling functions to quickly see if an object even has to be drawn at all
+#include "render_globals.h"
+#include "render_math.h"
+#include "chunk_globals.h"
 
 //return the amount of points of an AABB bounding box that are still visible (size of bounding box determined by offsets)
 uint32_t render_view_frustum_culling(int32_t x, int32_t y, int32_t z, int32_t x_offset, int32_t y_offset, int32_t z_offset) {
@@ -49,6 +52,9 @@ uint32_t render_view_frustum_culling(int32_t x, int32_t y, int32_t z, int32_t x_
     //once all the points of the bounding box are set, transform them to view coordinates
     for (int i = 0; i < 8; i++) {
         int32_t w = ((mat_vp[3][0] * point_list[i].x) + (mat_vp[3][1] * point_list[i].y) + (mat_vp[3][2] * point_list[i].z) + (mat_vp[3][3] * FIXED_POINT_FACTOR)) / FIXED_POINT_FACTOR;
+
+        if(!w)
+            continue;
 
         int32_t output_z = (((mat_vp[2][0] * point_list[i].x) + (mat_vp[2][1] * point_list[i].y) + (mat_vp[2][2] * point_list[i].z) + (mat_vp[2][3] * FIXED_POINT_FACTOR))) / w;
 

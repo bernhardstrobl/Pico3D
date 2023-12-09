@@ -1,3 +1,40 @@
+#include "render_globals.h"
+#include "render_math.h"
+
+float camera_position[3] = {0.0, 0.0, 0.0};
+int32_t camera_position_fixed_point[3] = {0, 0, 0};
+float pitch = 0;
+float yaw = 0;
+
+#ifndef NO_GLOBAL_OFFSET
+    int32_t global_offset_x;
+    int32_t global_offset_z;
+#endif
+
+
+//view matrix 
+float mat_camera[4][4] = {{ 1.0, 0.0, 0.0, 0.0},
+                          { 0.0, 1.0, 0.0, 0.0},
+                          { 0.0, 0.0, 1.0, 0.0},
+                          { 0.0, 0.0, 0.0, 1.0}};
+
+//camera matrix (local space)
+float mat_cam_rotate[4][4] = {{ 1.0, 0.0, 0.0, 0.0},
+                              { 0.0, 1.0, 0.0, 0.0},
+                              { 0.0, 0.0, 1.0, 0.0},
+                              { 0.0, 0.0, 0.0, 1.0}};
+
+//perspective projection matrix
+float mat_projection[4][4] = {{ atanf((CAMERA_FOVX * PI / 180) * 0.5), 0.0, 0.0, 0.0},
+                              { 0.0, atanf((CAMERA_FOVY * PI / 180) * 0.5), 0.0, 0.0},
+                              { 0.0, 0.0, -((ZFAR + ZNEAR) / (ZFAR - ZNEAR)), -((2.0*ZFAR*ZNEAR) / (ZFAR - ZNEAR))},
+                              { 0.0, 0.0, -1.0, 0.0}};
+
+int32_t mat_vp[4][4] = {{ 0, 0, 0, 0},
+                        { 0, 0, 0, 0},
+                        { 0, 0, 0, 0},
+                        { 0, 0, 0, 0}};
+
 //camera functions
 float dot_product3(float vec1[3], float vec2[3]) {
     return(vec1[0] * vec2[0] + vec1[1] * vec2[1] +vec1[2] * vec2[2]);
@@ -61,24 +98,8 @@ void move_camera(float move) {
     
     mat_mul(rotation_matrix, translate_matrix, mat_out);
 
-
-    //add the positions to the camera x/z position directly when free roaming
-    #ifdef FREE_ROAM
     camera_position[0] -= mat_out[0][3];
     camera_position[2] -= mat_out[2][3];
-
-    //do collision detection first
-    #else
-    int32_t newx = camera_position_fixed_point[0] -= float_to_int(mat_out[0][3]);
-    int32_t newy = camera_position_fixed_point[2] -= float_to_int(mat_out[2][3]);
-
-    uint8_t traversable = chunk_traversable(newx, newy, 0);
-    if (traversable) {
-        camera_position[0] -= mat_out[0][3];
-        camera_position[2] -= mat_out[2][3];
-    }
-    #endif
-
 }
 
 void render_view_projection() {

@@ -1,3 +1,8 @@
+#include "logic_globals.h"
+#include "../engine/render_globals.h"
+#include "../engine/render_math.h"
+
+#include "gate.h"
 
 #define GATE_DRAW_DISTANCE (FIXED_POINT_FACTOR * 35)
 

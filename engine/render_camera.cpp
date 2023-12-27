@@ -1,4 +1,5 @@
 #include "render_globals.h"
+#include "chunk_globals.h"
 #include "render_math.h"
 
 float camera_position[3] = {0.0, 0.0, 0.0};
@@ -120,12 +121,12 @@ void render_view_projection() {
         float old_position_z = camera_position[2];
         
         //calculate and update needed global offsets
-        global_offset_x = camera_position[0] / 10;
-        global_offset_z = camera_position[2] / 10;
+        global_offset_x = camera_position[0] / CHUNK_UNITS;
+        global_offset_z = camera_position[2] / CHUNK_UNITS;
 
         //we update the camera position to the new one and move the camera
-        camera_position[0] -= global_offset_x * 10;
-        camera_position[2] -= global_offset_z * 10;
+        camera_position[0] -= global_offset_x * CHUNK_UNITS;
+        camera_position[2] -= global_offset_z * CHUNK_UNITS;
 
         update_camera();
 

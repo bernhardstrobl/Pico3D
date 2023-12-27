@@ -69,7 +69,6 @@ void display_menu() {
         #else
         if (demo_progress < 2500) {
             text("Pico3D Engine", 28, 20);
-            text("by: Bernhard Strobl", 10, 30);
         }
 
         if ((demo_progress / 32) % 2 == 0) {

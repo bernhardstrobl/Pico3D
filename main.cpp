@@ -28,7 +28,13 @@ uint32_t perf_75_above = 0;
 
 #include "engine/render_globals.h"
 #include "engine/chunk_globals.h" //chunk settings
+
+#ifdef PICOCEAN
+#include "picocean/chunk_data_picocean.h"
+#else
 #include "chunk_data.h" //contains all the chunk data of the game world (exported by Blender addon)
+#endif
+
 #include "game/logic_globals.h"
 
 //Test files
@@ -150,6 +156,7 @@ int32_t render_sync() {
 }
 
 void init() {
+    
     //Launch the rasterizer on core 1
     multicore_launch_core1(core1_entry);
     

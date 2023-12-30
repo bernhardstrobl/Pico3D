@@ -7,6 +7,7 @@ project(pico32 C CXX ASM)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 
+option(PICOCEAN "Build Picocean version" OFF)
 option(GAMESCOM "Build gamescom version" OFF)
 
 # Initialize the Pico SDK
@@ -17,14 +18,61 @@ find_package(PICOSYSTEM REQUIRED)
 
 set(GLOBAL_DEFINES)
 
-if(GAMESCOM)
+if(PICOCEAN)
+    list(APPEND GLOBAL_DEFINES PICOCEAN) #enables a wind waker inspired demo
+    set(GAME_SOURCES
+        picocean/chunk_data_picocean.cpp
+        picocean/logic_day_night_cycle.cpp
+        picocean/logic_demo.cpp
+        picocean/logic_events.cpp
+        picocean/logic_gate.cpp
+        picocean/logic_grass.cpp
+        picocean/logic_info_text.cpp
+        picocean/logic_input.cpp
+        picocean/logic_menu.cpp
+        picocean/logic_npc.cpp
+        picocean/logic_physics.cpp
+        picocean/logic_quest_npcs.cpp
+        picocean/logic_random.cpp
+        picocean/logic_shoot.cpp
+        picocean/logic_zombies.cpp
+    )
+elseif(GAMESCOM)
     list(APPEND GLOBAL_DEFINES GAMESCOM) #enables tweaks for a gamescom version with peace loving balloons instead of zombies
-    set(ZOMBIE_SOURCES
+    set(GAME_SOURCES
+        chunk_data.cpp
+        game/logic_day_night_cycle.cpp
+        game/logic_demo.cpp
+        game/logic_events.cpp
+        game/logic_gate.cpp
+        game/logic_grass.cpp
+        game/logic_info_text.cpp
+        game/logic_input.cpp
+        game/logic_menu.cpp
+        game/logic_npc.cpp
+        game/logic_physics.cpp
+        game/logic_quest_npcs.cpp
+        game/logic_random.cpp
+
         game/gamescom/logic_balloon.cpp
         game/gamescom/logic_shoot_balloon.cpp
     )
 else()
-    set(ZOMBIE_SOURCES
+    set(GAME_SOURCES
+        chunk_data.cpp
+        game/logic_day_night_cycle.cpp
+        game/logic_demo.cpp
+        game/logic_events.cpp
+        game/logic_gate.cpp
+        game/logic_grass.cpp
+        game/logic_info_text.cpp
+        game/logic_input.cpp
+        game/logic_menu.cpp
+        game/logic_npc.cpp
+        game/logic_physics.cpp
+        game/logic_quest_npcs.cpp
+        game/logic_random.cpp
+
         game/logic_shoot.cpp
         game/logic_zombies.cpp
     )
@@ -48,7 +96,6 @@ endif()
 picosystem_executable(
     pico3d
     main.cpp
-    chunk_data.cpp
 
     engine/render_camera.cpp
     engine/render_chunk.cpp
@@ -59,19 +106,7 @@ picosystem_executable(
     engine/render_rasterize.cpp
     engine/render_triangle.cpp
 
-    game/logic_day_night_cycle.cpp
-    game/logic_demo.cpp
-    game/logic_events.cpp
-    game/logic_gate.cpp
-    game/logic_grass.cpp
-    game/logic_info_text.cpp
-    game/logic_input.cpp
-    game/logic_menu.cpp
-    game/logic_npc.cpp
-    game/logic_physics.cpp
-    game/logic_quest_npcs.cpp
-    game/logic_random.cpp
-    ${ZOMBIE_SOURCES}
+    ${GAME_SOURCES}
 )
 
 

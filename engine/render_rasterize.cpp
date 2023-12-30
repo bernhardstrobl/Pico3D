@@ -1,7 +1,11 @@
 #include "render_globals.h"
 #include "render_math.h"
 
-#include "../chunk_data.h" // chunk_texture_list
+#ifdef PICOCEAN
+#include "../picocean/chunk_data_picocean.h" // lodN_chunks, WORLD_SIZE_
+#else
+#include "../chunk_data.h" // lodN_chunks, WORLD_SIZE_
+#endif
 
 //all the shaders
 #include "shader_wireframe.cpp"

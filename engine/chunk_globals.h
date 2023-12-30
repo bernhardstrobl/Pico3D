@@ -6,7 +6,11 @@
 //#define WORLD_SIZE_X 12 //amount of chunks in x orientation
 //#define WORLD_SIZE_Y 12 //amount of chunks in y orientation
 
+#ifdef PICOCEAN
+#define CHUNK_UNITS 50 //much larger chunks for islands
+#else
 #define CHUNK_UNITS 10 //10 meter size per chunk (max is around 64)
+#endif
 
 #define CHUNK_SIZE (FIXED_POINT_FACTOR * CHUNK_UNITS) //Total fixed point representation of one chunk
 //starting location of chunks in world coordinates

@@ -3,7 +3,11 @@
 #include "render_math.h"
 #include "chunk_globals.h"
 
+#ifdef PICOCEAN
+#include "../picocean/chunk_data_picocean.h" // lodN_chunks, WORLD_SIZE_
+#else
 #include "../chunk_data.h" // lodN_chunks, WORLD_SIZE_
+#endif
 
 int32_t cached_triangles = 0; //amount of triangles currently in the cache
 

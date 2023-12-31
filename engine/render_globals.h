@@ -118,7 +118,15 @@ extern int8_t light_falloff; //amount to decrease vertex colors by when lit/unli
 #define LIGHT_DISTANCE (FIXED_POINT_FACTOR * 50000) //distance to a light source in which vertices are still lit
 extern color_t sky; //used by Core1 when clearing Framebuffer
 
+//uses a more complex skybox with horizon, ocean etc.
+#ifdef PICOCEAN
+extern uint16_t sky_begin;
+extern uint16_t horizon_begin;
 
+extern color_t sky_color;
+extern color_t horizon_color;
+extern color_t ocean_color;
+#endif
 
 //3d transformation matrices
 //camera info
@@ -146,8 +154,13 @@ extern float mat_cam_rotate[4][4];
 //perspective matrix (i.e. the one we want for games)
 #define CAMERA_WIDTH 1.0
 #define CAMERA_HEIGHT 1.0
+#ifdef PICOCEAN
+#define ZFAR 100
+#define ZNEAR 1.0
+#else
 #define ZFAR 40
 #define ZNEAR 0.25
+#endif
 #define CAMERA_FOVX 180.0
 #define CAMERA_FOVY 180.0
 

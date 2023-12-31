@@ -106,7 +106,7 @@ void logic_events() {
 
     } else if (menu == MENU_START) {
         //if the game is in the splash screen, hand over camera control to the demo logic
-        //logic_demo();
+        logic_demo();
 
     } else if (menu == MENU_DEATH) {
         if (death_reset >= DEATH_DURATION) {

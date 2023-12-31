@@ -15,6 +15,15 @@ uint8_t shader_override = 0;
 alignas(4) static int16_t zbuffer[SCREEN_WIDTH * SCREEN_HEIGHT] = { };
 
 color_t sky;
+//uses a more complex skybox with horizon, ocean etc.
+#ifdef PICOCEAN
+    uint16_t sky_begin;
+    uint16_t horizon_begin;
+
+    color_t sky_color = 0xFF00;
+    color_t horizon_color = 0xFF0F;
+    color_t ocean_color = 0x0F00;
+#endif
 
 int zbuffer_scale = FIXED_POINT_FACTOR / 16;
 
@@ -44,9 +53,39 @@ void RASTERIZE_SECTION render_rasterize(uint32_t num_triangle, color_t *fb) {
         fb[i] = 0xCFD0; //GBAR
     }*/
 
+    //uses a more complex skybox with horizon, ocean etc.
+    #ifdef PICOCEAN
+
+        //test values
+        //sky_begin = 50;
+        //horizon_begin = 100;
+
+        int i = 0;
+
+        //everything from 0 to sky_begin is a uniform sky color
+        for (; i < SCREEN_WIDTH * sky_begin; i++) {
+            fb[i] = sky_color; //GBAR
+        }
+
+        //sky_begin to horizon_begin is a gradient (sky_color -> horizon_color)
+        //calculate gradients
+        
+
+        for (; i < SCREEN_WIDTH * horizon_begin; i++) {
+            fb[i] = horizon_color; //GBAR
+        }
+
+        //everything below is uniform ocean color
+        for (; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++) {
+            fb[i] = ocean_color; //GBAR
+        }
+
+
+    #else
     for (int i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++) {
         fb[i] = sky; //GBAR
     }
+    #endif
     
 
 

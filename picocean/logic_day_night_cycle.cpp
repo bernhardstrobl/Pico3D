@@ -67,7 +67,7 @@ void logic_skybox() {
 
 
     //do the same for the sky beginning
-    point.y = -100 * FIXED_POINT_FACTOR;
+    point.y = -250 * FIXED_POINT_FACTOR;
     //transform point into screen space
     w = ((mat_vp[3][0] * point.x) + (mat_vp[3][1] * point.y) + (mat_vp[3][2] * point.z) + (mat_vp[3][3] * FIXED_POINT_FACTOR)) / FIXED_POINT_FACTOR;
     output_y = (((mat_vp[1][0] * point.x) + (mat_vp[1][1] * point.y) + (mat_vp[1][2] * point.z) + (mat_vp[1][3] * FIXED_POINT_FACTOR))) / w;

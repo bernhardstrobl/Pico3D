@@ -67,12 +67,28 @@ void RASTERIZE_SECTION render_rasterize(uint32_t num_triangle, color_t *fb) {
         }
 
         //sky_begin to horizon_begin is a gradient (sky_color -> horizon_color)
-        //calculate gradients
-        
+        uint32_t background_lines = horizon_begin - sky_begin;
 
-        for (; i < SCREEN_WIDTH * horizon_begin; i++) {
-            fb[i] = horizon_color; //GBAR
+        int32_t difference_red = ((horizon_color & 0xF) - (sky_color & 0xF));
+        int32_t difference_green = ((horizon_color & 0xF000) - (sky_color & 0xF000)) >> 12;
+        int32_t difference_blue = ((horizon_color & 0xF00) - (sky_color & 0xF00)) >> 8;
+
+        for (int x = 0; x < background_lines; x++) {
+            color_t current_color = 0;
+
+            uint32_t red = (sky_color & 0xF) + ((difference_red * x) / background_lines);
+            uint32_t green = ((sky_color & 0xF000) >> 12) + ((difference_green * x) / background_lines);
+            uint32_t blue =  ((sky_color & 0xF00) >> 8) + ((difference_blue * x) / background_lines);
+            current_color = (green << 4);
+            current_color = (current_color + blue) << 8;
+            current_color = current_color + red;
+
+            for (int y = 0; y < SCREEN_WIDTH; y++) {
+                fb[i] = current_color; //GBAR
+                i++;
+            }
         }
+
 
         //everything below is uniform ocean color
         for (; i < SCREEN_WIDTH * SCREEN_HEIGHT; i++) {

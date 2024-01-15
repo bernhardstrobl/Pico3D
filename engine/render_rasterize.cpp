@@ -58,7 +58,6 @@ void RASTERIZE_SECTION render_rasterize(uint32_t num_triangle, color_t *fb) {
 
         //test values
         //sky_begin = 50;
-        //horizon_begin = 100;
 
         int i = 0;
 

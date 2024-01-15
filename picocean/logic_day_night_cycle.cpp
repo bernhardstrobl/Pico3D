@@ -43,8 +43,6 @@ void logic_skybox() {
     //assume a position at origin moved from camera
     struct vertex_32 point;
     struct vertex_32 rotated_point;
-    //float x = 1.0;
-    //float y = 0.0
 
     point.x = 100 * FIXED_POINT_FACTOR;
     point.z = 0;
@@ -67,99 +65,30 @@ void logic_skybox() {
 
     horizon_begin = output_y;
 
+
     //do the same for the sky beginning
-    point.y = 10 * FIXED_POINT_FACTOR;
+    point.y = -100 * FIXED_POINT_FACTOR;
     //transform point into screen space
     w = ((mat_vp[3][0] * point.x) + (mat_vp[3][1] * point.y) + (mat_vp[3][2] * point.z) + (mat_vp[3][3] * FIXED_POINT_FACTOR)) / FIXED_POINT_FACTOR;
-
     output_y = (((mat_vp[1][0] * point.x) + (mat_vp[1][1] * point.y) + (mat_vp[1][2] * point.z) + (mat_vp[1][3] * FIXED_POINT_FACTOR))) / w;
-    output_y = ((output_y + FIXED_POINT_FACTOR) * (SCREEN_HEIGHT - 1)) / FIXED_POINT_FACTOR / 2;
+    output_y = SCREEN_HEIGHT - ((output_y + FIXED_POINT_FACTOR) * (SCREEN_HEIGHT - 1)) / FIXED_POINT_FACTOR / 2;
 
-    //sky_begin = output_y;
-
-
-
-    /*
-
-    int32_t y = 0;
-    int32_t x_offset = 100000;
-    int32_t y_offset = 100000; //height of skybox
-    int32_t z_offset = 100000;
-
-    //Generate the 8 points
-    struct vertex_32 point_list[8];
-
-    point_list[0].x = x + x_offset;
-    point_list[0].y = y ;
-    point_list[0].z = z;
-
-    point_list[1].x = x - x_offset;
-    point_list[1].y = y;
-    point_list[1].z = z;
-
-    point_list[2].x = x ;
-    point_list[2].y = y;
-    point_list[2].z = z - z_offset;
-
-    point_list[3].x = x;
-    point_list[3].y = y;
-    point_list[3].z = z - z_offset;
-
-    point_list[4].x = x + x_offset;
-    point_list[4].y = y;
-    point_list[4].z = z + z_offset;
-
-    point_list[5].x = x - x_offset;
-    point_list[5].y = y;
-    point_list[5].z = z + z_offset;
-
-    point_list[6].x = x + x_offset;
-    point_list[6].y = y;
-    point_list[6].z = z - z_offset;
-
-    point_list[7].x = x - x_offset;
-    point_list[7].y = y;
-    point_list[7].z = z - z_offset;
+    sky_begin = output_y;
 
 
-    //once all the points of the AABB bounding box are set, transform them to view coordinates
-    for (int i = 0; i < 8; i++) {
-        int32_t w = ((mat_vp[3][0] * point_list[i].x) + (mat_vp[3][1] * point_list[i].y) + (mat_vp[3][2] * point_list[i].z) + (mat_vp[3][3] * FIXED_POINT_FACTOR)) / FIXED_POINT_FACTOR;
-
-        int32_t output_z = (((mat_vp[2][0] * point_list[i].x) + (mat_vp[2][1] * point_list[i].y) + (mat_vp[2][2] * point_list[i].z) + (mat_vp[2][3] * FIXED_POINT_FACTOR))) / w;
-
-        //discard points asap in z direction
-        if (output_z < 0) {
-            continue;
-        }
-
-        int32_t output_x = (((mat_vp[0][0] * point_list[i].x) + (mat_vp[0][1] * point_list[i].y) + (mat_vp[0][2] * point_list[i].z) + (mat_vp[0][3] * FIXED_POINT_FACTOR))) / w;
-        output_x = (output_x + FIXED_POINT_FACTOR) * (SCREEN_WIDTH - 1) / FIXED_POINT_FACTOR / 2;
-
-        if (output_x > SCREEN_WIDTH || output_x < 0) {
-            continue;
-        }
-
-        int32_t output_y = (((mat_vp[1][0] * point_list[i].x) + (mat_vp[1][1] * point_list[i].y) + (mat_vp[1][2] * point_list[i].z) + (mat_vp[1][3] * FIXED_POINT_FACTOR))) / w;
-        output_y = SCREEN_HEIGHT - ((output_y + FIXED_POINT_FACTOR) * (SCREEN_HEIGHT - 1)) / FIXED_POINT_FACTOR / 2;
-
-
-        //evaluate the new sky position
-        if (i < 0) {
-            if (output_y < sky_begin) {
-                //sky_begin = output_y;
-            }
-        //evaluate the highest horizon position
-        } else {
-            if (output_y < horizon_begin) {
-                horizon_begin = output_y;
-            }
-        }
-
-
-
+    //if the sky is below the horizon, ignore
+    if (sky_begin >= horizon_begin) {
+        sky_begin = 0;
     }
-*/
+
+    //make sure ocean is drawn when looking down
+    if (horizon_begin > SCREEN_HEIGHT && pitch < 0.5) {
+        sky_begin = 0;
+        horizon_begin = 0;
+    }
+
+
+
     //clamp values
     if (sky_begin < 0) {
         sky_begin = 0;

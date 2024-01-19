@@ -203,8 +203,10 @@ void update(uint32_t tick) {
     }
     #endif
 
+#ifndef PICOCEAN
     //load stationary npcs (shops/quest givers) if close to the player
     render_quest_npcs();
+#endif
 
     //we prepare the triangles for the scenery/chunks here since the draw() function is already
     //heavily loaded with npc calculations
@@ -224,6 +226,7 @@ void update(uint32_t tick) {
     //get current area of player
     logic_player_area();
 
+#ifndef PICOCEAN
     //process zombies
     logic_zombies();
 
@@ -232,7 +235,11 @@ void update(uint32_t tick) {
 
     //calculate grass swaying motion (offset)
     logic_grass();
+#else
 
+    //logic_waves();
+
+#endif
 
 
     //increase value for animated textures
@@ -291,7 +298,7 @@ void draw(uint32_t tick) {
     //The Suzanne model is too memory heavy and is streamed in from flash memory at the cost of performance
     //render_model_16bit_flash(testmodel, TESTMODEL);
 
-
+#ifndef PICOCEAN
     //render objects close to the camera to reduce overdraw
     //foliage
     render_grass();
@@ -307,7 +314,11 @@ void draw(uint32_t tick) {
 
     //load triangle list with other moving npcs
     render_npcs();
-    
+#else
+
+
+
+#endif
 
 
     //note that we add triangles for the world/scenery chunks in the update() function as we simply would run out of time here

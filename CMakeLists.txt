@@ -36,6 +36,7 @@ if(PICOCEAN)
         picocean/logic_random.cpp
         picocean/logic_shoot.cpp
         picocean/logic_zombies.cpp
+        picocean/logic_waves.cpp
     )
 elseif(GAMESCOM)
     list(APPEND GLOBAL_DEFINES GAMESCOM) #enables tweaks for a gamescom version with peace loving balloons instead of zombies

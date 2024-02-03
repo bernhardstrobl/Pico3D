@@ -343,6 +343,11 @@ void draw(uint32_t tick) {
     pen(0, 0, 0);
     clear();
     */
+    
+    //debug camera position
+    //text("CamX:" + str(camera_position[0]), 0, 0);
+    //text("CamY:" + str(camera_position[1]), 0, 10);
+    //text("CamZ:" + str(camera_position[2]), 0, 20);
 
     //we can output complete 4x4 matrices if needed
     //mat_debug(mat_camera, 0);

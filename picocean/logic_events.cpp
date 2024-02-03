@@ -19,11 +19,11 @@ void logic_new_game() {
     //reset all the values to initial game values
     //move camera to starting position
     //camera height, based roughly on an average mortal
-    camera_position[1] = 1.8; //height: 1.8 m
+    camera_position[1] = 10; //height: 1.8 m
 
     //in the city center
-    camera_position[0] = -35;
-    camera_position[2] = 0;
+    camera_position[0] = 0;
+    camera_position[2] = 35;
 
     //start next to city gates (usefull if testing object loading at origin with e.g. render_model_16bit etc.)
     //camera_position[0] = -8;

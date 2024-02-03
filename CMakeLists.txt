@@ -26,7 +26,6 @@ if(PICOCEAN)
         picocean/logic_demo.cpp
         picocean/logic_events.cpp
         picocean/logic_gate.cpp
-        picocean/logic_grass.cpp
         picocean/logic_info_text.cpp
         picocean/logic_input.cpp
         picocean/logic_menu.cpp

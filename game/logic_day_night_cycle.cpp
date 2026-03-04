@@ -16,46 +16,48 @@ void logic_day_night_cycle() {
 
     //define color pallette depending on day
     //day
-    if (daylight == 0) {
-        sky_r = DAY_R;
-        sky_g = DAY_G;
-        sky_b = DAY_B;
+    switch(daylight){
+        case 0:
+            sky_r = DAY_R;
+            sky_g = DAY_G;
+            sky_b = DAY_B;
 
-        light_falloff = 0;
+            light_falloff = 0;
 
-    //dusk
-    } else if (daylight == 1) {
-        //calculate bias toward night
-        int32_t r = ((NIGHT_R - DAY_R) * progress) / QUARTER_DAY;
-        int32_t g = ((NIGHT_G - DAY_G) * progress) / QUARTER_DAY;
-        int32_t b = ((NIGHT_B - DAY_B) * progress) / QUARTER_DAY;
+        //dusk
+        case 1:
+            //calculate bias toward night 
+            //simplify to a uint8 if possible?
+            int32_t r = ((NIGHT_R - DAY_R) * progress) / QUARTER_DAY;
+            int32_t g = ((NIGHT_G - DAY_G) * progress) / QUARTER_DAY;
+            int32_t b = ((NIGHT_B - DAY_B) * progress) / QUARTER_DAY;
 
-        sky_r = DAY_R + r;
-        sky_g = DAY_G + g;
-        sky_b = DAY_B + b;
+            sky_r = DAY_R + r;
+            sky_g = DAY_G + g;
+            sky_b = DAY_B + b;
 
-        light_falloff = (MAX_FALLOFF * progress) / QUARTER_DAY;
+            light_falloff = (MAX_FALLOFF * progress) / QUARTER_DAY;
 
-    //night
-    } else if (daylight == 2) {
+        //night
+        case 2:
 
-        sky_r = NIGHT_R;
-        sky_g = NIGHT_G;
-        sky_b = NIGHT_B;
+            sky_r = NIGHT_R;
+            sky_g = NIGHT_G;
+            sky_b = NIGHT_B;
 
-        light_falloff = MAX_FALLOFF;
+            light_falloff = MAX_FALLOFF;
 
-    //dawn
-    } else {
+        //dawn
+        default:
 
-        int32_t r = ((DAY_R - NIGHT_R) * progress) / QUARTER_DAY;
-        int32_t g = ((DAY_G - NIGHT_G) * progress) / QUARTER_DAY;
-        int32_t b = ((DAY_B - NIGHT_B) * progress) / QUARTER_DAY;
-        sky_r = NIGHT_R + r;
-        sky_g = NIGHT_G + g;
-        sky_b = NIGHT_B + b;
+            int32_t r = ((DAY_R - NIGHT_R) * progress) / QUARTER_DAY;
+            int32_t g = ((DAY_G - NIGHT_G) * progress) / QUARTER_DAY;
+            int32_t b = ((DAY_B - NIGHT_B) * progress) / QUARTER_DAY;
+            sky_r = NIGHT_R + r;
+            sky_g = NIGHT_G + g;
+            sky_b = NIGHT_B + b;
 
-        light_falloff = (MAX_FALLOFF * (QUARTER_DAY - progress)) / QUARTER_DAY;
+            light_falloff = (MAX_FALLOFF * (QUARTER_DAY - progress)) / QUARTER_DAY;
 
     }
 

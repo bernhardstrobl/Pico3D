@@ -47,33 +47,33 @@ int32_t process_lighting(const struct light &light, vertex_32 &vertex, color_t &
 
 }
 
-color_t darken(color_t &color) {
+color_t darken(color_t* color) {
 
-    uint8_t r = color & 0x000F;
-    uint8_t b = (color >> 8) & 0x000F;
-    uint8_t g = (color >> 12) & 0x000F;
+    uint8_t r = *color & 0x000F;
+    uint8_t b = (*color >> 8) & 0x000F;
+    uint8_t g = (*color >> 12) & 0x000F;
 
     //reduce colors
     r -= light_falloff;
     b -= light_falloff;
     g -= light_falloff;
 
-    if (r > 15)
+    if (r > 15){
         r = 0;
-    
-    if (b > 15)
+    };
+    if (b > 15){
         b = 0;
-
-    if (g > 15)
+    };
+    if (g > 15){
         g = 0;
+    };
+    *color = g;
+    *color <<= 4;
+    *color |= b;
+    *color <<= 8;
+    *color |= r;
 
-    color = g;
-    color <<= 4;
-    color |= b;
-    color <<= 8;
-    color |= r;
-
-    return color;
+    
 }
 
 void vertex_lighting(struct vertex_32 &in, color_t &color, int16_t chunk_x, int16_t chunk_y) {
@@ -115,7 +115,7 @@ void vertex_lighting(struct vertex_32 &in, color_t &color, int16_t chunk_x, int1
     }
 
     //we have to assume the vertex has not found a close enough light source by now, so darken it
-    color = darken(color);
+    darken(&color);
 
     return;
 

@@ -51,26 +51,19 @@ void update_camera() {
     float sinYaw = sin(yaw);
 
 
-    float xaxis[3] = { cosYaw, 0, -sinYaw };
-    float yaxis[3] = { sinYaw * sinPitch, cosPitch, cosYaw * sinPitch };
-    float zaxis[3] = { sinYaw * cosPitch, -sinPitch, cosPitch * cosYaw };
+    float table[3][3]={{ cosYaw, 0, -sinYaw },{ sinYaw * sinPitch, cosPitch, cosYaw * sinPitch },{ sinYaw * cosPitch, -sinPitch, cosPitch * cosYaw }};
 
-
-    mat_camera[0][0] = xaxis[0];
-    mat_camera[0][1] = xaxis[1];
-    mat_camera[0][2] = xaxis[2];
-    mat_camera[0][3] = -dot_product3( xaxis, camera_position );
-
-    mat_camera[1][0] = yaxis[0];
-    mat_camera[1][1] = yaxis[1];
-    mat_camera[1][2] = yaxis[2];
-    mat_camera[1][3] = -dot_product3( yaxis, camera_position );
-
-    mat_camera[2][0] = zaxis[0];
-    mat_camera[2][1] = zaxis[1];
-    mat_camera[2][2] = zaxis[2];
-    mat_camera[2][3] = -dot_product3( zaxis, camera_position );
-
+    //the rpi pico is 133mhz but has 256kb of ram, having more ram is more important then speed may be buggy
+    for(int i=0; i<2;i++){
+        
+        mat_camera[i][0] = xaxis[0];
+        mat_camera[i]][1] = xaxis[1];
+        mat_camera[i][2] = xaxis[2];
+        mat_camera[i][3] = -dot_product3(table[i], camera_position );
+        };
+    };
+    delete &i;
+    
     mat_camera[3][0] = 0;
     mat_camera[3][1] = 0;
     mat_camera[3][2] = 0;
